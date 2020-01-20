@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:shareplace_flutter/pages/inicio_page.dart';
-import 'package:shareplace_flutter/routes/routes.dart';
+
+import 'package:shareplace_flutter/src/pages/inicio_page.dart';
+import 'package:shareplace_flutter/src/routes/routes.dart';
 
 void main() => runApp(MyApp());
 
