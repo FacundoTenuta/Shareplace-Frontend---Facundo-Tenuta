@@ -1,24 +1,37 @@
 import 'package:flutter/material.dart';
+import 'package:shareplace_flutter/src/bloc/provider.dart';
 
-import 'package:shareplace_flutter/src/pages/inicio_page.dart';
+import 'package:shareplace_flutter/src/pages/login_page.dart';
+import 'package:shareplace_flutter/src/preferencias_usuario/preferencias_usuario.dart';
 import 'package:shareplace_flutter/src/routes/routes.dart';
 
-void main() => runApp(MyApp());
+void main() async {
+  
+  WidgetsFlutterBinding.ensureInitialized();
+
+  final prefs = new PreferenciasUsuario();
+  await prefs.initPrefs();
+
+  runApp(MyApp());
+
+}
 
 class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-      title: 'Shareplace',
-      debugShowCheckedModeBanner: false,
-      initialRoute: 'inicio',
-      routes: getApplicationRoutes(),
-      onGenerateRoute: (settings){
-        return MaterialPageRoute(
-          builder: (BuildContext context) => InicioPage()
-        );
-      }
+    return Provider(
+      child: MaterialApp(
+        title: 'Shareplace',
+        debugShowCheckedModeBanner: false,
+        initialRoute: 'login',
+        routes: getApplicationRoutes(),
+        onGenerateRoute: (settings){
+          return MaterialPageRoute(
+            builder: (BuildContext context) => LoginPage()
+          );
+        }
+      ),
     );  
   }
 }
