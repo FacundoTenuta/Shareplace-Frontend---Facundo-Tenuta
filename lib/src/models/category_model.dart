@@ -6,14 +6,14 @@ Client clientFromJson(String str) => Client.fromJson(json.decode(str));
 String clientToJson(Client data) => json.encode(data.toJson());
 
 class Client {
-    List<Datum> data;
+    List<Category> data;
 
     Client({
         this.data,
     });
 
     factory Client.fromJson(Map<String, dynamic> json) => Client(
-        data: List<Datum>.from(json["data"].map((x) => Datum.fromJson(x))),
+        data: List<Category>.from(json["data"].map((x) => Category.fromJson(x))),
     );
 
     Map<String, dynamic> toJson() => {
@@ -21,20 +21,20 @@ class Client {
     };
 }
 
-class Datum {
+class Category {
     int id;
     String name;
     DateTime createdAt;
     DateTime updatedAt;
 
-    Datum({
+    Category({
         this.id,
         this.name,
         this.createdAt,
         this.updatedAt,
     });
 
-    factory Datum.fromJson(Map<String, dynamic> json) => Datum(
+    factory Category.fromJson(Map<String, dynamic> json) => Category(
         id: json["id"],
         name: json["name"],
         createdAt: DateTime.parse(json["created_at"]),

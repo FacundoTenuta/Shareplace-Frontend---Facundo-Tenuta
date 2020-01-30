@@ -7,14 +7,14 @@ Client clientFromJson(String str) => Client.fromJson(json.decode(str));
 String clientToJson(Client data) => json.encode(data.toJson());
 
 class Client {
-    List<Datum> data;
+    List<Publication> data;
 
     Client({
         this.data,
     });
 
     factory Client.fromJson(Map<String, dynamic> json) => Client(
-        data: List<Datum>.from(json["data"].map((x) => Datum.fromJson(x))),
+        data: List<Publication>.from(json["data"].map((x) => Publication.fromJson(x))),
     );
 
     Map<String, dynamic> toJson() => {
@@ -22,7 +22,24 @@ class Client {
     };
 }
 
-class Datum {
+class Publications{
+  List<Publication> items = new List();
+
+  Publications();
+
+  Publications.fromJsonList(List<dynamic> jsonList){
+
+    if (jsonList == null) return;
+
+    for (var item in jsonList) {
+      final pelicula = new Publication.fromJson(item);
+      items.add(pelicula);
+    }
+
+  }
+}
+
+class Publication {
     int id;
     DateTime createdAt;
     DateTime updatedAt;
@@ -36,7 +53,7 @@ class Datum {
     List<Condition> conditions;
     List<Category> categories;
 
-    Datum({
+    Publication({
         this.id,
         this.createdAt,
         this.updatedAt,
@@ -51,7 +68,7 @@ class Datum {
         this.categories,
     });
 
-    factory Datum.fromJson(Map<String, dynamic> json) => Datum(
+    factory Publication.fromJson(Map<String, dynamic> json) => Publication(
         id: json["id"],
         createdAt: DateTime.parse(json["created_at"]),
         updatedAt: DateTime.parse(json["updated_at"]),
@@ -80,6 +97,15 @@ class Datum {
         "conditions": List<dynamic>.from(conditions.map((x) => x.toJson())),
         "categories": List<dynamic>.from(categories.map((x) => x.toJson())),
     };
+
+  @override
+  bool operator ==(other) {
+    return this.id == other.id;
+  }
+
+  @override
+  int get hashCode => id.hashCode;
+
 }
 
 class Category {

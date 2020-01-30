@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:shareplace_flutter/src/bloc/login_bloc.dart';
 import 'package:shareplace_flutter/src/bloc/menu_bloc.dart';
+import 'package:shareplace_flutter/src/bloc/publication_bloc.dart';
 
 
 class Provider extends InheritedWidget{
@@ -10,6 +11,8 @@ class Provider extends InheritedWidget{
   final loginBloc = LoginBloc();
 
   final menuBloc  = MenuBloc();
+
+  final publicationsBloc = PublicationBloc();
 
   factory Provider({Key key, Widget child}){
 
@@ -38,6 +41,10 @@ class Provider extends InheritedWidget{
 
   static MenuBloc getMenuBloc (BuildContext context){
     return context.dependOnInheritedWidgetOfExactType<Provider>().menuBloc;
+  }
+
+  static PublicationBloc getPublicationsBloc (BuildContext context){
+    return context.dependOnInheritedWidgetOfExactType<Provider>().publicationsBloc;
   }
 
 }

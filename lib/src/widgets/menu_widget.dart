@@ -56,43 +56,43 @@ class MenuWidget extends StatelessWidget {
           ListTile(
             leading: Icon(Icons.home),
             title: Text('Inicio'),
-            onTap: ()=> Navigator.pushReplacementNamed(context, 'inicio'),
+            onTap: ()=> Navigator.pushReplacementNamed(context, 'home'),
           ),
 
           ListTile(
             leading: Icon(Icons.event_note),
             title: Text('Mis Publicaciones'),
-            onTap: (){},
+            onTap: ()=> Navigator.pushReplacementNamed(context, 'myPublications'),
           ),
 
           ListTile(
             leading: Icon(Icons.repeat),
             title: Text('Prestamos'),
-            onTap: (){},
+            onTap: ()=> Navigator.pushReplacementNamed(context, 'loans'),
           ),
 
           ListTile(
             leading: Icon(Icons.restore),
             title: Text('Historial de Prestamos'),
-            onTap: (){},
+            onTap: ()=> Navigator.pushReplacementNamed(context, 'loansRecord'),
           ),
 
           ListTile(
             leading: Icon(Icons.description),
             title: Text('Solicitudes'),
-            onTap: (){},
+            onTap: ()=> Navigator.pushReplacementNamed(context, 'requests'),
           ),
 
           ListTile(
             leading: Icon(Icons.account_circle),
             title: Text('Mi Perfil'),
-            onTap: (){},
+            onTap: ()=> Navigator.pushReplacementNamed(context, 'profile'),
           ),
 
           ListTile(
             leading: Icon(Icons.help),
             title: Text('Acerca de Shareplace'),
-            onTap: (){},
+            onTap: ()=> Navigator.pushReplacementNamed(context, 'info'),
           ),
 
           ListTile(

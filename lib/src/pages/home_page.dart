@@ -6,15 +6,15 @@ import 'package:shareplace_flutter/src/providers/publication_provider.dart';
 import 'package:shareplace_flutter/src/search/search_delegate.dart';
 import 'package:shareplace_flutter/src/widgets/menu_widget.dart';
 
-class MyPublicationsPage extends StatefulWidget {
+class HomePage extends StatefulWidget {
 
   
 
   @override
-  _MyPublicationsState createState() => _MyPublicationsState();
+  _HomePageState createState() => _HomePageState();
 }
 
-class _MyPublicationsState extends State<MyPublicationsPage> {
+class _HomePageState extends State<HomePage> {
 
   final publicationsProvider = new PublicationProvider();
 
@@ -53,7 +53,7 @@ class _MyPublicationsState extends State<MyPublicationsPage> {
       appBar: AppBar(
         elevation: 12.0,
         backgroundColor: Color.fromRGBO(125, 201, 231, 1),
-        title: Text('Mis Publicaciones'),
+        title: Text('Inicio'),
         centerTitle: true,
         actions: <Widget>[
           IconButton(
@@ -62,6 +62,7 @@ class _MyPublicationsState extends State<MyPublicationsPage> {
               showSearch(
                 context: context,
                 delegate: DataSearch(),
+                // query: 'asdads'
               );
             },
           )

@@ -64,13 +64,13 @@ class LoginPage extends StatelessWidget {
           Column(
               children: <Widget>[
                 Text('Shareplace', style: TextStyle(fontSize: 55.0, color: Color.fromRGBO(46, 41, 172, 1))),
-                SizedBox(height: size.height * 0.05),
+                SizedBox(height: size.height * 0.09),
                 _crearDni(bloc),
-                SizedBox(height: size.height * 0.05),
+                SizedBox(height: size.height * 0.07),
                 _crearPassword(bloc),
-                SizedBox(height: size.height * 0.05),
+                SizedBox(height: size.height * 0.07),
                 Text('¿Olvidaste tu contraseña?'),
-                SizedBox(height: size.height * 0.05),
+                SizedBox(height: size.height * 0.1),
                 _crearBoton(bloc),
               ],
             ),
@@ -89,11 +89,12 @@ class LoginPage extends StatelessWidget {
       builder: (BuildContext context, AsyncSnapshot snapshot){
         
         return Container(
-          padding: EdgeInsets.symmetric(horizontal: 20.0),
+          padding: EdgeInsets.symmetric(horizontal: 40.0),
           child: TextField(
+            keyboardType: TextInputType.number,
             decoration: InputDecoration(
               labelText: 'DNI',
-              counterText: snapshot.data,
+              // counterText: snapshot.data,
               errorText: snapshot.error,
             ),
             onChanged: bloc.changeDni,
@@ -111,12 +112,13 @@ class LoginPage extends StatelessWidget {
       stream: bloc.passwordStream ,
       builder: (BuildContext context, AsyncSnapshot snapshot){
         return Container(
-          padding: EdgeInsets.symmetric(horizontal: 20.0),
+          padding: EdgeInsets.symmetric(horizontal: 40.0),
           child: TextField(
+            
             obscureText: true,
             decoration: InputDecoration(
               labelText: 'Contraseña',
-              counterText: snapshot.data,
+              // counterText: snapshot.data,
               errorText: snapshot.error,
             ),
             onChanged: bloc.changePassword,
@@ -141,7 +143,7 @@ class LoginPage extends StatelessWidget {
             borderRadius: BorderRadius.circular(5.0)
           ),
           elevation: 0.0,
-          color: Colors.deepPurple,
+          color: Color.fromRGBO(46, 41, 172, 1),
           textColor: Colors.white,
           onPressed: snapshot.hasData ? () => _login(bloc, context) : null,
           
@@ -156,7 +158,7 @@ class LoginPage extends StatelessWidget {
 
     if (info['ok']) {
 
-      Navigator.pushReplacementNamed(context, 'inicio');
+      Navigator.pushReplacementNamed(context, 'home');
 
       print(info['user']);
 
