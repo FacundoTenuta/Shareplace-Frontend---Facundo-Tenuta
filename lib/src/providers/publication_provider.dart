@@ -47,6 +47,31 @@ class PublicationProvider{
 
   }
 
+  Future<List<Publication>> cargarMisPublications(int userId, int page) async {
+
+    if (_cargando){
+      return [];
+    }
+
+    _cargando = true;
+    print('Cargando siguientes...');
+
+    final url = Uri.http('10.0.2.2', '/shareplace-backend---facundo-tenuta/public/api/users/$userId/publications', {
+      'page'    : page.toString(),
+    });
+
+    final resp = await _procesarRespuesta(url);
+
+    _publications.addAll(resp);
+
+    publicationsSink(_publications);
+    
+    _cargando = false;
+
+    return resp;
+
+  }
+
 
   final _publicationsStreamController = StreamController<List<Publication>>.broadcast();
 

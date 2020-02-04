@@ -43,7 +43,7 @@ class Publication {
     int id;
     DateTime createdAt;
     DateTime updatedAt;
-    Title title;
+    String title;
     String description;
     DateTime createDate;
     State state;
@@ -72,7 +72,7 @@ class Publication {
         id: json["id"],
         createdAt: DateTime.parse(json["created_at"]),
         updatedAt: DateTime.parse(json["updated_at"]),
-        title: titleValues.map[json["title"]],
+        title: json["title"],
         description: json["description"],
         createDate: DateTime.parse(json["createDate"]),
         state: stateValues.map[json["state"]],

@@ -21,6 +21,23 @@ class Client {
     };
 }
 
+class Requestions{
+  List<Requestion> items = new List();
+
+  Requestions();
+
+  Requestions.fromJsonList(List<dynamic> jsonList){
+
+    if (jsonList == null) return;
+
+    for (var item in jsonList) {
+      final pelicula = new Requestion.fromJson(item);
+      items.add(pelicula);
+    }
+
+  }
+}
+
 class Requestion {
     int id;
     DateTime createdAt;
@@ -29,7 +46,10 @@ class Requestion {
     DateTime fromDate;
     DateTime untilDate;
     String reason;
-    String state;
+    bool active;
+    bool isLoan;
+    DateTime startDate;
+    DateTime endDate;
     int publicationId;
     int requesterId;
 
@@ -41,7 +61,10 @@ class Requestion {
         this.fromDate,
         this.untilDate,
         this.reason,
-        this.state,
+        this.active,
+        this.isLoan,
+        this.startDate,
+        this.endDate,
         this.publicationId,
         this.requesterId,
     });
@@ -54,7 +77,10 @@ class Requestion {
         fromDate: DateTime.parse(json["fromDate"]),
         untilDate: DateTime.parse(json["untilDate"]),
         reason: json["reason"],
-        state: json["state"],
+        active: json["active"] == 1,
+        isLoan: json["isLoan"] == 1,
+        startDate: json["startDate"],
+        endDate: json["endDate"],
         publicationId: json["publication_id"],
         requesterId: json["requester_id"],
     );
@@ -67,8 +93,19 @@ class Requestion {
         "fromDate": "${fromDate.year.toString().padLeft(4, '0')}-${fromDate.month.toString().padLeft(2, '0')}-${fromDate.day.toString().padLeft(2, '0')}",
         "untilDate": "${untilDate.year.toString().padLeft(4, '0')}-${untilDate.month.toString().padLeft(2, '0')}-${untilDate.day.toString().padLeft(2, '0')}",
         "reason": reason,
-        "state": state,
+        "active": active,
+        "isLoan": isLoan,
+        "startDate": startDate,
+        "endDate": endDate,
         "publication_id": publicationId,
         "requester_id": requesterId,
     };
+
+    @override
+    bool operator ==(other) {
+      return this.id == other.id;
+    }
+
+    @override
+    int get hashCode => id.hashCode;
 }

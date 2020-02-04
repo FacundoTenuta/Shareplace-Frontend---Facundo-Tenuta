@@ -26,6 +26,7 @@ class User {
     String name;
     String lastName;
     String email;
+    int phone;
     String image;
     int dni;
     DateTime birthDate;
@@ -42,6 +43,7 @@ class User {
         this.name,
         this.lastName,
         this.email,
+        this.phone,
         this.image,
         this.dni,
         this.birthDate,
@@ -59,6 +61,7 @@ class User {
         name: json["name"],
         lastName: json["lastName"],
         email: json["email"],
+        phone: json["phone"],
         image: json["image"],
         dni: json["dni"],
         birthDate: json["birthDate"] == null ? null : DateTime.parse(json["birthDate"]),
@@ -76,6 +79,7 @@ class User {
         "name": name,
         "lastName": lastName,
         "email": email,
+        "phone": phone,
         "image": image,
         "dni": dni,
         "birthDate": birthDate == null ? null : "${birthDate.year.toString().padLeft(4, '0')}-${birthDate.month.toString().padLeft(2, '0')}-${birthDate.day.toString().padLeft(2, '0')}",
@@ -87,6 +91,14 @@ class User {
         "links": List<dynamic>.from(links.map((x) => x.toJson())),
         "abilities": List<dynamic>.from(abilities.map((x) => x.toJson())),
     };
+
+    @override
+  bool operator ==(other) {
+    return this.id == other.id;
+  }
+
+  @override
+  int get hashCode => id.hashCode;
 }
 
 class Ability {

@@ -23,6 +23,7 @@ class MenuWidget extends StatelessWidget {
             child: DrawerHeader(
               child: Container(
                 child: Column(
+                  mainAxisAlignment: MainAxisAlignment.spaceAround,
                   children: <Widget>[
 
                     StreamBuilder(
@@ -56,49 +57,50 @@ class MenuWidget extends StatelessWidget {
           ListTile(
             leading: Icon(Icons.home),
             title: Text('Inicio'),
-            onTap: ()=> Navigator.pushReplacementNamed(context, 'home'),
+            onTap: ()=> Navigator.pushNamed(context, 'home'),
           ),
 
           ListTile(
             leading: Icon(Icons.event_note),
             title: Text('Mis Publicaciones'),
-            onTap: ()=> Navigator.pushReplacementNamed(context, 'myPublications'),
+            onTap: ()=> Navigator.pushNamed(context, 'myPublications'),
           ),
 
           ListTile(
             leading: Icon(Icons.repeat),
             title: Text('Prestamos'),
-            onTap: ()=> Navigator.pushReplacementNamed(context, 'loans'),
+            onTap: ()=> Navigator.pushNamed(context, 'loans'),
           ),
 
           ListTile(
             leading: Icon(Icons.restore),
             title: Text('Historial de Prestamos'),
-            onTap: ()=> Navigator.pushReplacementNamed(context, 'loansRecord'),
+            onTap: ()=> Navigator.pushNamed(context, 'loansHistoric'),
           ),
 
           ListTile(
             leading: Icon(Icons.description),
             title: Text('Solicitudes'),
-            onTap: ()=> Navigator.pushReplacementNamed(context, 'requests'),
+            onTap: ()=> Navigator.pushNamed(context, 'requests'),
           ),
 
           ListTile(
             leading: Icon(Icons.account_circle),
             title: Text('Mi Perfil'),
-            onTap: ()=> Navigator.pushReplacementNamed(context, 'profile'),
+            onTap: ()=> Navigator.pushNamed(context, 'profile'),
+            // onTap: ()=>  Navigator.,
           ),
 
           ListTile(
             leading: Icon(Icons.help),
             title: Text('Acerca de Shareplace'),
-            onTap: ()=> Navigator.pushReplacementNamed(context, 'info'),
+            onTap: ()=> Navigator.pushNamed(context, 'info'),
           ),
 
           ListTile(
             leading: Icon(Icons.power_settings_new),
             title: Text('Cerrar Sesion'),
-            onTap: ()=> Navigator.pushReplacementNamed(context, 'login'),
+            onTap: ()=> Navigator.pushNamed(context, 'login'),
           ),
         ],
       ),

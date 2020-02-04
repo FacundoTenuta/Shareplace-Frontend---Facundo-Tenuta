@@ -2,6 +2,7 @@ import 'dart:async';
 
 import 'package:flutter/material.dart';
 import 'package:shareplace_flutter/src/models/publication_model.dart' as model;
+import 'package:shareplace_flutter/src/preferencias_usuario/preferencias_usuario.dart';
 import 'package:shareplace_flutter/src/providers/publication_provider.dart';
 import 'package:shareplace_flutter/src/search/search_delegate.dart';
 import 'package:shareplace_flutter/src/widgets/menu_widget.dart';
@@ -16,6 +17,8 @@ class MyPublicationsPage extends StatefulWidget {
 
 class _MyPublicationsState extends State<MyPublicationsPage> {
 
+  final prefs = PreferenciasUsuario();
+
   final publicationsProvider = new PublicationProvider();
 
   ScrollController _scrollController = new ScrollController();
@@ -28,7 +31,7 @@ class _MyPublicationsState extends State<MyPublicationsPage> {
   void initState() {
     super.initState();
     
-    _cargarPublicaciones();
+    _cargarMisPublicaciones();
 
     _scrollController.addListener((){
 
@@ -70,6 +73,7 @@ class _MyPublicationsState extends State<MyPublicationsPage> {
       body: Stack(
         children: <Widget>[
           _crearLista(),
+          _listaVacia(),
           _crearLoading(),
         ],
       ) 
@@ -83,6 +87,7 @@ class _MyPublicationsState extends State<MyPublicationsPage> {
     return RefreshIndicator(
       onRefresh: obtenerPagina1,
       child: ListView.builder(
+        padding: EdgeInsets.only(left: 30, right: 30, top: 10),
         controller: _scrollController,
         itemCount: _publications.length,
         itemBuilder: (BuildContext context, int index){
@@ -98,14 +103,19 @@ class _MyPublicationsState extends State<MyPublicationsPage> {
 
       _publications.clear();
       _page = 1;
-      _cargarPublicaciones();
+      _cargarMisPublicaciones();
+      if (_publications.isEmpty) {
+        
+      }
 
   }
 
 
-  void _cargarPublicaciones() async{
+  void _cargarMisPublicaciones() async{
 
-    final resp = await publicationsProvider.cargarPublications(_page);
+    final resp = await publicationsProvider.cargarMisPublications(prefs.user, _page);
+
+    print(prefs.user);
 
     if (resp.isNotEmpty) {
       for (var i = 0; i < resp.length; i++) {
@@ -143,7 +153,7 @@ class _MyPublicationsState extends State<MyPublicationsPage> {
       duration: Duration(milliseconds: 250)
     );
 
-    _cargarPublicaciones();
+    _cargarMisPublicaciones();
   }
 
   Widget _crearLoading() {
@@ -171,6 +181,16 @@ class _MyPublicationsState extends State<MyPublicationsPage> {
 
   }
 
+  Widget _listaVacia(){
+
+    if (_publications.isEmpty) {
+      return Text('No posee publicaciones');
+    }else{
+      return Container();
+    }
+
+  }
+
 
   Widget _publication(BuildContext context, model.Publication publi) {
 
@@ -178,10 +198,10 @@ class _MyPublicationsState extends State<MyPublicationsPage> {
 
     return GestureDetector(
       child: Container(
-        margin: EdgeInsets.symmetric(vertical: 20.0),
+        margin: EdgeInsets.symmetric(vertical: 7.0),
         decoration: BoxDecoration(
               color: Colors.white,
-              borderRadius: BorderRadius.circular(25.0),
+              borderRadius: BorderRadius.circular(15.0),
               boxShadow: <BoxShadow> [
                 BoxShadow(
                   color: Colors.black26,
@@ -194,7 +214,7 @@ class _MyPublicationsState extends State<MyPublicationsPage> {
             ),
         child: ClipRRect(
           
-          borderRadius: BorderRadius.circular(25.0),
+          borderRadius: BorderRadius.circular(15.0),
           child: Row(
             children: <Widget>[
               FadeInImage(
