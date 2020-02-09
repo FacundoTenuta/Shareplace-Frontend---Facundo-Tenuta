@@ -1,39 +1,59 @@
 
+// import 'dart:html';
 import 'dart:io';
 
 import 'package:flutter/material.dart';
-// import 'package:image_picker/image_picker.dart';
+import 'package:image_picker/image_picker.dart';
+import 'package:provider/provider.dart';
+// import 'package:shareplace_flutter/src/bloc/menu_bloc.dart';
 import 'package:shareplace_flutter/src/models/user_model.dart';
 import 'package:shareplace_flutter/src/preferencias_usuario/preferencias_usuario.dart';
-import 'package:shareplace_flutter/src/providers/usuario_provider.dart';
-
+import 'package:shareplace_flutter/src/providers/avatar_provider.dart';
+import 'package:shareplace_flutter/src/providers/user_provider.dart';
 
 
 
 class ProfilePage extends StatefulWidget {
+//   @override
+//   _ProfilePageState createState() => _ProfilePageState();
+// }
+
+
+  ProfilePage(){
+    
+  }
+
   @override
   _ProfilePageState createState() => _ProfilePageState();
 }
 
-final prefs = PreferenciasUsuario();
-
-final userProvider = new UsuarioProvider();
-
 class _ProfilePageState extends State<ProfilePage> {
+final prefs = PreferenciasUsuario();
 
   final formKey = GlobalKey<FormState>();
 
-  File image;
+  File _imageNueva;
 
-  String _name, _lastName, _mail, _phone, _description;
+  Future<User> user;
 
-  @override
-  void initState() {
-    super.initState();
-  }
+  String _name, _lastName, _mail, _phone, _description, _birthDate;
+
+  String _image;
 
   @override
   Widget build(BuildContext context) {
+
+    // final avatarProvider = Provider.of<AvatarProvider>(context, listen: false);
+
+    // UserProvider user = Provider.of<UserProvider>(context, listen: false);
+    // _name = user.getUser.name;
+    // _lastName = user.getUser.lastName;
+    // _mail = user.getUser.email;
+    // _phone = user.getUser.phone.toString();
+    // _description = user.getUser.description;
+    // _image = user.getUser.image;
+
+    // final userProvider = Provider.of<UserProvider>(context);
 
     return Scaffold(
       backgroundColor: Color.fromRGBO(229, 241, 246, 1),
@@ -59,17 +79,26 @@ class _ProfilePageState extends State<ProfilePage> {
       ),
       body: Stack(
           children: <Widget>[
-            _perfil(),
+            _perfil(context),
           ],
         ),
     );
   }
 
-  Widget _perfil() {
+  Widget _perfil(BuildContext context) {
+
+    final userProvider = Provider.of<UserProvider>(context, listen: false);
+
+
+    user = userProvider.cargarUsuario(prefs.user);
+
 
     return FutureBuilder(
-      future: userProvider.cargarUsuario(prefs.user),
+      future: user,
       builder: (BuildContext context, AsyncSnapshot<User> snapshot) {
+
+        
+
         if (snapshot.hasData) {
           return SingleChildScrollView(
             child: Container(
@@ -96,7 +125,7 @@ class _ProfilePageState extends State<ProfilePage> {
                     SizedBox(height: 30.0),
                     _descripcion(snapshot),
                     SizedBox(height: 30.0),
-                    _botonAceptar(),
+                    _botonAceptar(context, snapshot, userProvider),
                     SizedBox(height: 30.0),
                   ],
                 ),
@@ -111,13 +140,14 @@ class _ProfilePageState extends State<ProfilePage> {
             )
           );
         }
-      },
+      }
     );
-
   }
+    
 
-  Widget _botonAceptar() {
+  
 
+  Widget _botonAceptar( BuildContext context, AsyncSnapshot<User> snapshot, UserProvider userProvider) {
     return Container(
       child: ButtonTheme(
         minWidth: 130.0,
@@ -130,16 +160,14 @@ class _ProfilePageState extends State<ProfilePage> {
           shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.circular(25),
           ),
-          onPressed: _submit,
+          onPressed: (){
+            formKey.currentState.save();
+            userProvider.editarUsuario(_name, _lastName, _mail, _phone, _description, _imageNueva);
+          },
         ),
       )
     );
 
-  }
-
-  void _submit(){
-      formKey.currentState.save();
-      userProvider.editarUsuario(_name, _lastName, _mail, _phone, _description);
   }
 
   Widget _nombre(AsyncSnapshot<User> snapshot) {
@@ -204,10 +232,15 @@ class _ProfilePageState extends State<ProfilePage> {
 
   Widget _telefono(AsyncSnapshot<User> snapshot) {
 
-    TextEditingController asd = TextEditingController(text: '');
+      TextEditingController asd;
+    
 
-    if (snapshot.data.phone.toString() == 'null') {
-      TextEditingController asd = TextEditingController(text: snapshot.data.phone.toString());
+    if (snapshot.data.phone != 'null') {
+      asd = TextEditingController(text: snapshot.data.phone);
+      print('asdad');
+      print(snapshot.data.phone);
+    }else{
+      asd = TextEditingController(text: '');
     }
 
     return Container(
@@ -227,30 +260,30 @@ class _ProfilePageState extends State<ProfilePage> {
     
   }
 
-  Widget _nacimiento(AsyncSnapshot<User> snapshot) {
+  // Widget _nacimiento() {
 
-    if (snapshot.data.birthDate.toString() != 'null') {
-      TextEditingController asd = TextEditingController(text: snapshot.data.birthDate.toString());
-    }else{
-      TextEditingController asd = TextEditingController(text: ' ');
-    }
+  //   if (_birthDate.toString() != 'null') {
+  //     TextEditingController asd = TextEditingController(text: _birthDate.toString());
+  //   }else{
+  //     TextEditingController asd = TextEditingController(text: ' ');
+  //   }
 
-    TextEditingController asd = TextEditingController(text: snapshot.data.birthDate.toString());
+  //   // TextEditingController asd = TextEditingController(text: _birthDate.toString());
 
-    return Container(
-      padding: EdgeInsets.symmetric(horizontal: 20.0),
-      child: TextField(
-        controller: asd,
-        keyboardType: TextInputType.text,
-        decoration: InputDecoration(
-          suffixIcon: Icon(Icons.edit, size: 30,),
-          border: OutlineInputBorder(),
-          labelText: 'Fecha de nacimiento',
-        ),
-      ),
-    );
+  //   return Container(
+  //     padding: EdgeInsets.symmetric(horizontal: 20.0),
+  //     child: TextField(
+  //       // controller: asd,
+  //       keyboardType: TextInputType.text,
+  //       decoration: InputDecoration(
+  //         suffixIcon: Icon(Icons.edit, size: 30,),
+  //         border: OutlineInputBorder(),
+  //         labelText: 'Fecha de nacimiento',
+  //       ),
+  //     ),
+  //   );
     
-  }
+  // }
 
   Widget _dni(AsyncSnapshot<User> snapshot) {
 
@@ -273,14 +306,28 @@ class _ProfilePageState extends State<ProfilePage> {
   }
 
   Widget _avatar(AsyncSnapshot<User> snapshot) {
+
+
+    ImageProvider imagen;
+
+    print(_image);
+
+    if (_image == null) {
+      imagen = NetworkImage('http://10.0.2.2/shareplace-backend---facundo-tenuta/public/img/' + snapshot.data.image);
+    }else{
+      imagen = FileImage(_imageNueva);
+    }
+
+    print('se redibuja?');
+
     return Container(
       padding: EdgeInsets.symmetric(vertical: 50),
       child: Stack(
         children: <Widget>[
-          CircleAvatar(
-            backgroundImage: NetworkImage('http://10.0.2.2/shareplace-backend---facundo-tenuta/public/img/${snapshot.data.image}'),
-            radius: 80.0,
-          ),
+            CircleAvatar(
+              backgroundImage: imagen,
+              radius: 80.0,
+            ),
           Positioned(
             right: 0,
             bottom: 0,
@@ -288,7 +335,16 @@ class _ProfilePageState extends State<ProfilePage> {
               backgroundColor: Color.fromRGBO(0, 150, 136, 1),
               heroTag: 'btnavatar',
               child: Icon(Icons.camera_alt),
-              onPressed: _seleccionarAvatar,
+              onPressed: () async {
+                _imageNueva = await ImagePicker.pickImage(source: ImageSource.gallery);
+                  print(_image);
+                setState(() {
+                  if (_imageNueva != null) {
+                    _image = _imageNueva.path;
+                  }
+                });
+                print(_image);
+              },
             ),
           ),
         ],
@@ -298,10 +354,12 @@ class _ProfilePageState extends State<ProfilePage> {
 
   Widget _descripcion(AsyncSnapshot<User> snapshot) {
 
-    TextEditingController asd = TextEditingController(text: '');
+    TextEditingController asd;
 
-    if (snapshot.data.description.toString() == 'null') {
-      TextEditingController asd = TextEditingController(text: snapshot.data.phone.toString());
+    if (snapshot.data.description == 'null') {
+      asd = TextEditingController(text: snapshot.data.description);
+    }else{
+      asd = TextEditingController(text: '');
     }
 
     return Container(
@@ -323,11 +381,12 @@ class _ProfilePageState extends State<ProfilePage> {
 
   }
 
-
-
   void _seleccionarAvatar() async {
 
-    // image = await ImagePicker.pickImage(source: ImageSource.camera);
+    _imageNueva = await ImagePicker.pickImage(source: ImageSource.gallery);
 
+    // avatarProvider.setAvatar(_imageNueva.path);
+
+ 
   }
 }

@@ -25,7 +25,7 @@ class PublicationProvider{
 
     // _publicationsPage++;
 
-    print('Cargando siguientes...');
+    // print('Cargando siguientes...');
 
     
 
@@ -54,7 +54,7 @@ class PublicationProvider{
     }
 
     _cargando = true;
-    print('Cargando siguientes...');
+    // print('Cargando siguientes...');
 
     final url = Uri.http('10.0.2.2', '/shareplace-backend---facundo-tenuta/public/api/users/$userId/publications', {
       'page'    : page.toString(),
@@ -100,7 +100,7 @@ class PublicationProvider{
     final resp = await http.get(url);
     final decodedData = json.decode(resp.body);
 
-    print(decodedData);
+    // print(decodedData);
 
     final publications = Publications.fromJsonList(decodedData['data']);
 

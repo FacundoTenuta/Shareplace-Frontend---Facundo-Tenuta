@@ -1,23 +1,27 @@
 import 'package:flutter/material.dart';
-import 'package:shareplace_flutter/src/bloc/login_bloc.dart';
-import 'package:shareplace_flutter/src/bloc/provider.dart';
+import 'package:provider/provider.dart';
 import 'package:shareplace_flutter/src/models/user_model.dart';
-import 'package:shareplace_flutter/src/providers/usuario_provider.dart';
+import 'package:shareplace_flutter/src/providers/user_provider.dart';
 import 'package:shareplace_flutter/src/utils/utils.dart' as utils;
 
 class LoginPage extends StatelessWidget {
 
-  final usuarioProvider = new UsuarioProvider();
+  final formKey = GlobalKey<FormState>();
+
+  String _user, _password;
 
   @override
   Widget build(BuildContext context) {
+
+    final user = Provider.of<UserProvider>(context);
+
     return Scaffold(
       // resizeToAvoidBottomPadding: false,
       resizeToAvoidBottomInset: false,
       body: Stack(
         children: <Widget>[
           _crearFondo(context),
-          _loginForm(context),
+          _loginForm(context, user),
         ],
       )
     );
@@ -46,95 +50,85 @@ class LoginPage extends StatelessWidget {
 
   }
 
-  Widget _loginForm(BuildContext context) {
+  Widget _loginForm(BuildContext context, UserProvider user) {
 
-    final bloc = Provider.getLoginBloc(context);
     final size = MediaQuery.of(context).size;
 
-    return Column(
-        children: <Widget>[
+    return Form(
+      key: formKey,
+      child: Column(
+          children: <Widget>[
 
-          SafeArea(
-            child: Container(
-              height: size.height * 0.15,
+            SafeArea(
+              child: Container(
+                height: size.height * 0.15,
+              ),
             ),
-          ),
 
 
-          Column(
-              children: <Widget>[
-                Text('Shareplace', style: TextStyle(fontSize: 55.0, color: Color.fromRGBO(46, 41, 172, 1))),
-                SizedBox(height: size.height * 0.09),
-                _crearDni(bloc),
-                SizedBox(height: size.height * 0.07),
-                _crearPassword(bloc),
-                SizedBox(height: size.height * 0.07),
-                Text('¿Olvidaste tu contraseña?'),
-                SizedBox(height: size.height * 0.1),
-                _crearBoton(bloc),
-              ],
-            ),
+            Column(
+                children: <Widget>[
+                  Text('Shareplace', style: TextStyle(fontSize: 55.0, color: Color.fromRGBO(46, 41, 172, 1))),
+                  SizedBox(height: size.height * 0.09),
+                  _crearDni(user),
+                  SizedBox(height: size.height * 0.07),
+                  _crearPassword(user),
+                  SizedBox(height: size.height * 0.07),
+                  Text('¿Olvidaste tu contraseña?'),
+                  SizedBox(height: size.height * 0.1),
+                  _crearBoton(user, context),
+                ],
+              ),
   
 
-        ],
-      );
+          ],
+        ),
+    );
     
 
   }
 
-  Widget _crearDni(LoginBloc bloc) {
+  Widget _crearDni(UserProvider user) {
 
-    return StreamBuilder(
-      stream:  bloc.dniStream,
-      builder: (BuildContext context, AsyncSnapshot snapshot){
-        
-        return Container(
+    return 
+
+        Container(
           padding: EdgeInsets.symmetric(horizontal: 40.0),
-          child: TextField(
+          child: TextFormField(
             keyboardType: TextInputType.number,
             decoration: InputDecoration(
               labelText: 'DNI',
-              // counterText: snapshot.data,
-              errorText: snapshot.error,
             ),
-            onChanged: bloc.changeDni,
+            onSaved: (input) => _user = input,
           ),
         );
 
-      },
-    );
+      }
+    
 
-  }
+  
 
-  Widget _crearPassword(LoginBloc bloc) {
+  Widget _crearPassword(UserProvider user) {
 
-    return StreamBuilder(
-      stream: bloc.passwordStream ,
-      builder: (BuildContext context, AsyncSnapshot snapshot){
-        return Container(
+        return 
+        Container(
           padding: EdgeInsets.symmetric(horizontal: 40.0),
-          child: TextField(
+          child: TextFormField(
             
             obscureText: true,
             decoration: InputDecoration(
               labelText: 'Contraseña',
-              // counterText: snapshot.data,
-              errorText: snapshot.error,
             ),
-            onChanged: bloc.changePassword,
+            onSaved: (input) => _password = input,
           ),
         );
-      },
-    );
+      }
 
-  }
 
-  Widget _crearBoton(LoginBloc bloc){
+  Widget _crearBoton(UserProvider user, BuildContext context){
 
-    return StreamBuilder(
-      stream: bloc.formValidStream,
-      builder: (BuildContext context, AsyncSnapshot snapshot){
-        return RaisedButton(
+        return 
+        RaisedButton(
           child: Container(
             padding: EdgeInsets.symmetric(horizontal: 80.0, vertical: 15.0),
             child: Text('Iniciar Sesión', style: TextStyle(fontSize: 14)),
@@ -145,25 +139,25 @@ class LoginPage extends StatelessWidget {
           elevation: 0.0,
           color: Color.fromRGBO(46, 41, 172, 1),
           textColor: Colors.white,
-          onPressed: snapshot.hasData ? () => _login(bloc, context) : null,
+          onPressed: 
+          () => _login(user, context),
           
         );
-      },
-    );
   }
+    
+  
 
-  _login(LoginBloc bloc, BuildContext context) async {
+  _login(UserProvider userProvider, BuildContext context) async {
 
-    Map info = await usuarioProvider.login(bloc.dni, bloc.password);
+    formKey.currentState.save();
+
+    Map info = await userProvider.login(_user, _password);
 
     if (info['ok']) {
 
       Navigator.pushReplacementNamed(context, 'home');
 
-      print(info['user']);
-
-      final user = User.fromJson(info['user']);
-      Provider.getMenuBloc(context).cargarDatos(user.image, user.name + ' ' + user.lastName);
+      
 
     }else{
 
@@ -172,6 +166,5 @@ class LoginPage extends StatelessWidget {
     }
 
   }
-
 
 }

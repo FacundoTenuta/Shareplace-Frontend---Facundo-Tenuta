@@ -26,7 +26,7 @@ class User {
     String name;
     String lastName;
     String email;
-    int phone;
+    String phone;
     String image;
     int dni;
     DateTime birthDate;
@@ -61,7 +61,7 @@ class User {
         name: json["name"],
         lastName: json["lastName"],
         email: json["email"],
-        phone: json["phone"],
+        phone: json["phone"].toString(),
         image: json["image"],
         dni: json["dni"],
         birthDate: json["birthDate"] == null ? null : DateTime.parse(json["birthDate"]),
