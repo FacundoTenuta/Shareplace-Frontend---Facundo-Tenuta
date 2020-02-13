@@ -22,8 +22,6 @@ class UserProvider with ChangeNotifier {
   void setUser( user ){
     this._user = user;
 
-    print(this._user.name);
-
     notifyListeners();
   }
 
@@ -80,8 +78,6 @@ class UserProvider with ChangeNotifier {
     final resp = await _procesarRespuesta(url);
 
     setUser(resp);
-
-    print('todo ok');
     
     _cargando = false;
 
@@ -93,9 +89,10 @@ class UserProvider with ChangeNotifier {
     final resp = await http.get(url);
     final decodedData = json.decode(resp.body);
 
-    print(decodedData);
+    // print(decodedData);
 
     final user = User.fromJson(decodedData['data']);
+    print('consume');
 
     return user;
 
@@ -139,8 +136,6 @@ class UserProvider with ChangeNotifier {
       data: formData
     );
 
-    print(response);
-
     // this.cargarUsuario(_prefs.user);
 
     // User user = this.getUser;
@@ -148,18 +143,31 @@ class UserProvider with ChangeNotifier {
 
     User user = User.fromJson(response.data['data']);
 
-    print(user.name);
-    print(getUser.name);
 
     // setUser = user;
 
     setUser(user);
-    
-    
-    print(getUser.name);
+        
+    _cargando = false;
+
+  }
+
+
+  Future<User> obtenerUsuario(int user) async{
+
+    if (_cargando){
+      return null;
+    }
+
+    _cargando = true;
+
+    final url = Uri.http('10.0.2.2', '/shareplace-backend---facundo-tenuta/public/api/users/$user');
+
+    final resp = await _procesarRespuesta(url);
     
     _cargando = false;
 
+    return resp;
   }
 
 

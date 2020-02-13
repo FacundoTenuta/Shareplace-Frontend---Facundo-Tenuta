@@ -56,17 +56,21 @@ class _ListaSolicitudesEnviadasState extends State<ListaSolicitudesEnviadas> {
 
   @override
   Widget build(BuildContext context) {
-    return RefreshIndicator(
-      onRefresh: obtenerPagina1,
-      child: ListView.builder(
-        padding: EdgeInsets.only(left: 30, right: 30, top: 10),
-        controller: _scrollController,
-        itemCount: _sent.length,
-        itemBuilder: (BuildContext context, int index){
-          return _request(context, _sent[index]);
-        },
-      ),
-    );
+    if (_sent.isNotEmpty) {
+      return RefreshIndicator(
+        onRefresh: obtenerPagina1,
+        child: ListView.builder(
+          padding: EdgeInsets.only(left: 30, right: 30, top: 10),
+          controller: _scrollController,
+          itemCount: _sent.length,
+          itemBuilder: (BuildContext context, int index){
+            return _request(context, _sent[index]);
+          },
+        ),
+      );
+    }else{
+      return Center(child: Text('No posee solicitudes emitidas'));
+    }
   }
 
   Future<Null> obtenerPagina1() async {
@@ -129,8 +133,6 @@ class _ListaSolicitudesEnviadasState extends State<ListaSolicitudesEnviadas> {
 
     String fecha = DateFormat('dd/MM/yyyy').format(solicitud.createdAt);
 
-    print(fecha);
-
     return Container(
       child: Column(
         children: <Widget>[
@@ -156,5 +158,6 @@ class _ListaSolicitudesEnviadasState extends State<ListaSolicitudesEnviadas> {
       ),
     );
   }
+
 
 }

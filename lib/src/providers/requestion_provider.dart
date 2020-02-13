@@ -23,8 +23,6 @@ class RequestionProvider{
     _cargando = true;
 
 
-    print('Cargando siguientes...');
-
     
 
     final url = Uri.http('10.0.2.2', '/shareplace-backend---facundo-tenuta/public/api/users/$userId/requestionsReceived', {
@@ -51,7 +49,6 @@ class RequestionProvider{
     }
 
     _cargando = true;
-    print('Cargando siguientes...');
 
     final url = Uri.http('10.0.2.2', '/shareplace-backend---facundo-tenuta/public/api/users/$userId/requestionsSent', {
       'page'    : page.toString(),
@@ -76,7 +73,6 @@ class RequestionProvider{
     }
 
     _cargando = true;
-    print('Cargando siguientes...');
 
     final url = Uri.http('10.0.2.2', '/shareplace-backend---facundo-tenuta/public/api/users/$userId/loans', {
       'page'    : page.toString(),
@@ -101,7 +97,6 @@ class RequestionProvider{
     }
 
     _cargando = true;
-    print('Cargando siguientes...');
 
     final url = Uri.http('10.0.2.2', '/shareplace-backend---facundo-tenuta/public/api/users/$userId/loans', {
       'page'    : page.toString(),
@@ -138,12 +133,10 @@ class RequestionProvider{
     final resp = await http.get(url);
     final decodedData = json.decode(resp.body);
 
-    print(decodedData);
 
     final publications = Requestions.fromJsonList(decodedData['data']);
 
     _lastPage = decodedData['current_page'];
-    print(_lastPage);
 
     return publications.items;
 

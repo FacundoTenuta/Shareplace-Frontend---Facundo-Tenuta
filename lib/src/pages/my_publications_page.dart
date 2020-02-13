@@ -1,6 +1,7 @@
 import 'dart:async';
 
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 import 'package:shareplace_flutter/src/models/publication_model.dart' as model;
 import 'package:shareplace_flutter/src/preferencias_usuario/preferencias_usuario.dart';
 import 'package:shareplace_flutter/src/providers/publication_provider.dart';
@@ -76,8 +77,22 @@ class _MyPublicationsState extends State<MyPublicationsPage> {
           _listaVacia(),
           _crearLoading(),
         ],
-      ) 
-      
+      ),
+
+      floatingActionButton: Container(
+        margin: EdgeInsets.all(20.0),
+        child: FloatingActionButton(
+          heroTag: null,
+          backgroundColor: Color.fromRGBO(0, 150, 136, 1),
+          child: Icon(Icons.add, size: 35,),
+          onPressed: (){
+            Navigator.pushNamed(context, 'newPublicationPage');
+            // final provider = Provider.of<PublicationProvider>(context, listen: false);
+    
+            // provider.setArguments(publi.id, publi.title, publi.principalImage, publi.images, publi.description, publi.conditions);
+          },
+        ),
+      ),
       
     );
   }
@@ -104,9 +119,9 @@ class _MyPublicationsState extends State<MyPublicationsPage> {
       _publications.clear();
       _page = 1;
       _cargarMisPublicaciones();
-      if (_publications.isEmpty) {
+      // if (_publications.isEmpty) {
         
-      }
+      // }
 
   }
 
@@ -114,8 +129,6 @@ class _MyPublicationsState extends State<MyPublicationsPage> {
   void _cargarMisPublicaciones() async{
 
     final resp = await publicationsProvider.cargarMisPublications(prefs.user, _page);
-
-    print(prefs.user);
 
     if (resp.isNotEmpty) {
       for (var i = 0; i < resp.length; i++) {
@@ -184,7 +197,7 @@ class _MyPublicationsState extends State<MyPublicationsPage> {
   Widget _listaVacia(){
 
     if (_publications.isEmpty) {
-      return Text('No posee publicaciones');
+      return Center(child: Text('No posee publicaciones'));
     }else{
       return Container();
     }
@@ -218,8 +231,7 @@ class _MyPublicationsState extends State<MyPublicationsPage> {
           child: Row(
             children: <Widget>[
               FadeInImage(
-                  // image: NetworkImage(publi.principalImage),
-                  image: AssetImage('assets/camara.jpg'),
+                  image: NetworkImage('http://10.0.2.2/shareplace-backend---facundo-tenuta/public/img/${publi.principalImage}'),
                   placeholder: AssetImage('assets/24.gif'),
                   fadeInDuration: Duration(milliseconds: 150),
                   height: 200.0,
@@ -228,8 +240,11 @@ class _MyPublicationsState extends State<MyPublicationsPage> {
               ),
               Column(
                 children: <Widget>[
-                  Text(publi.title.toString()),
-                  Text(publi.id.toString())
+                  Container(
+                    padding: EdgeInsets.only(left: 10),
+                    width: 130,
+                    child: Center(child: Text(publi.title.toString()))
+                  ),
                 ],
               ),
             ],
@@ -237,7 +252,10 @@ class _MyPublicationsState extends State<MyPublicationsPage> {
         ),
       ),
       onTap: (){
-        Navigator.pushNamed(context, 'publicationDetail');
+        final publicationProvider = Provider.of<PublicationProvider>(context, listen: false);
+
+        publicationProvider.setPublicationReal(publi);
+        Navigator.pushNamed(context, 'myPublicationsDetail');
       },
     );
   }

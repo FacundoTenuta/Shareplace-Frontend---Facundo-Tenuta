@@ -1,6 +1,7 @@
 import 'dart:async';
 
 import 'package:flutter/material.dart';
+import 'package:shareplace_flutter/src/models/argumentos_other_profile_model.dart';
 import 'package:shareplace_flutter/src/models/publication_model.dart' as model;
 import 'package:shareplace_flutter/src/providers/publication_provider.dart';
 import 'package:shareplace_flutter/src/search/search_delegate.dart';
@@ -210,9 +211,13 @@ class _HomePageState extends State<HomePage> {
               ),
               Column(
                 children: <Widget>[
-                  Text(publi.title.toString()),
-                  
-                  Text(publi.id.toString())
+                  Container(
+                    padding: EdgeInsets.only(left: 10),
+                    width: 130,
+                    child: Center(
+                      child: Text(publi.title.toString())
+                    )
+                  ),
                 ],
               ),
             ],
@@ -220,7 +225,8 @@ class _HomePageState extends State<HomePage> {
         ),
       ),
       onTap: (){
-        Navigator.pushNamed(context, 'publicationDetail', arguments: publi);
+        ArgumentosOtherProfile arg = ArgumentosOtherProfile(publi, true);
+        Navigator.pushNamed(context, 'publicationDetail', arguments: arg);
       },
     );
   }

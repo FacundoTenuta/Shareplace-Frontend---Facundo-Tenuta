@@ -3,32 +3,37 @@
 
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/material.dart';
-import 'package:shareplace_flutter/src/models/argumentos_other_profile_model.dart';
+import 'package:provider/provider.dart';
 import 'package:shareplace_flutter/src/models/publication_model.dart' as model;
-import 'package:shareplace_flutter/src/models/user_model.dart';
-import 'package:shareplace_flutter/src/providers/user_provider.dart';
+import 'package:shareplace_flutter/src/providers/publication_provider.dart';
 import 'package:shareplace_flutter/src/widgets/menu_widget.dart';
 
-class PublicationDetailPage extends StatefulWidget{
+class MyPublicationDetailPage extends StatefulWidget{
 
   @override
-  _PublicationDetailPageState createState() => _PublicationDetailPageState();
+  _MyPublicationDetailPageState createState() => _MyPublicationDetailPageState();
 }
 
-class _PublicationDetailPageState extends State<PublicationDetailPage> {
+class _MyPublicationDetailPageState extends State<MyPublicationDetailPage> {
 
   int _current = 0;
-
-  bool usuario = true;
 
   @override
   Widget build(BuildContext context) {
 
-    ArgumentosOtherProfile arg = ModalRoute.of(context).settings.arguments;
+    // final model.Publication publi = ModalRoute.of(context).settings.arguments;
 
-    final model.Publication publi = arg.publi;
+    final publicationProvider = Provider.of<PublicationProvider>(context);
 
-    usuario = arg.perfilHabilitado;
+    // publicationProvider.setPublicationReal(publi);
+
+    model.Publication publi = publicationProvider.getPublicationReal;
+    
+    // provider.setConditions(publi.conditions);
+    // provider.setDescription(publi.description);
+    // provider.setImages(publi.images);
+    // provider.setPrincipalImage(publi.principalImage);
+    // provider.setTitle(publi.title);
 
     // final model.Publication publi = ModalRoute.of(context).settings.arguments;
 
@@ -46,73 +51,65 @@ class _PublicationDetailPageState extends State<PublicationDetailPage> {
           )
         ],
       ),
-      body: _publicacion(context, publi),
+      // body: _publicacion(context, publi),
+      body: _publicacion(context),
+            
+      floatingActionButton: Container(
+        margin: EdgeInsets.all(20.0),
+        child: FloatingActionButton(
+          heroTag: null,
+          backgroundColor: Color.fromRGBO(0, 150, 136, 1),
+          child: Icon(Icons.edit, size: 35,),
+          onPressed: (){
+            Navigator.pushNamed(context, 'editPublicationPage');
+            final provider = Provider.of<PublicationProvider>(context, listen: false);
+    
+            provider.setArguments(publi.id, publi.title, publi.principalImage, publi.images, publi.description, publi.conditions);
+          },
+        ),
+      ),
+
     );
   }
-
-  Widget _publicacion(BuildContext context, model.Publication publi) {
+// , model.Publication publi
+  Widget _publicacion(BuildContext context) {
 
     return SingleChildScrollView(
       child: Column(
         children: <Widget>[
           
-          Container(
-          child: _carousel(publi),
+          Consumer<PublicationProvider>(
+            builder:(_, provider, __)=> Container(
+              child: _carousel(provider.getPublicationReal),
+            ),
           ),
-          Container(
-            padding: EdgeInsets.all(20),
-            child: Text(
-              publi.title.toString(), 
-              style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold))
+          Consumer<PublicationProvider>(
+            builder: (_, provider, __)=> Container(
+              padding: EdgeInsets.all(20),
+              child: Text(
+                provider.getPublicationReal.title.toString(), 
+                style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold))
+            ),
           ),
-          Text(publi.description.toString()),
+          Consumer<PublicationProvider>(
+            builder:(_, provider, __)=> Text(provider.getPublicationReal.description.toString())
+          ),
           Container(
             padding: EdgeInsets.all(15),
             margin: EdgeInsets.only(left: 45),
             alignment: Alignment.centerLeft,
             child: Text('Condiciones', style: TextStyle(fontStyle: FontStyle.italic, fontWeight: FontWeight.bold, color: Color.fromRGBO(0, 0, 0, 0.55)))
           ),
-          _conditions(publi),
-          Container(
-            padding: EdgeInsets.only(top: 15, left: 15, right: 15, bottom: 0),
-            margin: EdgeInsets.only(left: 45),
-            alignment: Alignment.centerLeft,
-            child: Text('Usuario', style: TextStyle(fontStyle: FontStyle.italic, fontWeight: FontWeight.bold, color: Color.fromRGBO(0, 0, 0, 0.55)))
-          ),
-          _usuario(publi),
-          SizedBox(height: 20.0),
-          ButtonTheme(
-            minWidth: 130.0,
-            height: 50.0,
-            child: RaisedButton(
-              padding: EdgeInsets.only(right: 20, left: 20),
-              textColor: Colors.white,
-              color: Color.fromRGBO(26, 176, 181, 1),
-              child: Container(
-                child: Text('Solicitar Préstamo', style: TextStyle(fontSize: 18))
-              ),
-              shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(25),
-              ),
-              onPressed: (){},
-            ),
+          Consumer<PublicationProvider>(
+            builder:(_, provider, __)=> _conditions(provider.getPublicationReal)
           ),
           SizedBox(height: 20.0),
-          ButtonTheme(
-            minWidth: 130.0,
-            height: 50.0,
-            child: RaisedButton(
-              padding: EdgeInsets.only(right: 20, left: 20),
-              textColor: Colors.white,
-              color: Color.fromRGBO(238, 1, 1, 1),
-              child: Container(
-                child: Text('Denunciar', style: TextStyle(fontSize: 18)),
-              ),
-              shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(25),
-              ),
-              onPressed: (){},
-            ),
+          Consumer<PublicationProvider>(
+            builder: (_, provider, __)=> _botonCambiarEstado(provider),
+          ),
+          SizedBox(height: 20.0),
+          Consumer<PublicationProvider>(
+            builder:(_, provider, __)=> _botonBorrar(provider)
           ),
           SizedBox(height: 20.0),
         ],
@@ -122,47 +119,6 @@ class _PublicationDetailPageState extends State<PublicationDetailPage> {
 
 
 
-  }
-
-  Widget _usuario(model.Publication publi) {
-
-    if (usuario) {
-      
-      Future<User> user = UserProvider().obtenerUsuario(publi.userId);
-
-      return FutureBuilder(
-        future: user,
-        builder: (BuildContext context, AsyncSnapshot<User> snapshot) {
-          if (snapshot.hasData) {
-            return RaisedButton(
-              child: Container(              
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  mainAxisSize: MainAxisSize.min,
-                  children: <Widget>[
-                    Icon(Icons.person),
-                    Container(
-                      margin: EdgeInsets.only(left: 10, right: 10),
-                      child: Text(snapshot.data.name + ' ' + snapshot.data.lastName, style: TextStyle(color: Color.fromRGBO(0, 0, 238, 1)),)
-                    ),
-                  ],
-                ),
-              ),
-              shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(25),
-              ),
-              onPressed: (){
-                Navigator.pushNamed(context, 'otherProfile', arguments: snapshot.data);
-              },
-            );
-          }else{
-            return Text('Cargando...');
-          }
-        }
-      );
-    }else{
-      return Container();
-    }
   }
 
   Widget _conditions(model.Publication publi) {
@@ -246,7 +202,7 @@ class _PublicationDetailPageState extends State<PublicationDetailPage> {
           hoverElevation: 0,
           highlightElevation: 0,
           onPressed: (){
-            Navigator.pop(context);
+            Navigator.popAndPushNamed(context, 'myPublications');
           },
         )
       ]
@@ -278,7 +234,59 @@ class _PublicationDetailPageState extends State<PublicationDetailPage> {
 
   }
 
-  List<Widget> _conditionsList(model.Publication publi) {}
+  Widget _botonBorrar(PublicationProvider provider) {
+
+    return ButtonTheme(
+          minWidth: 130.0,
+          height: 50.0,
+          child: RaisedButton(
+            padding: EdgeInsets.only(right: 15, left: 15),
+            textColor: Colors.white,
+            color: Color.fromRGBO(238, 1, 1, 1),
+            child: Text('Borrar publicación', style: TextStyle(fontSize: 18),),
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(25),
+            ),
+            onPressed: (){
+              provider.borrarPublicacion();
+              Navigator.popAndPushNamed(context, 'myPublications');
+            },
+          ),
+        );
+
+  }
+
+  Widget _botonCambiarEstado(PublicationProvider provider) {
+
+    String texto;
+    Color color;
+
+    if (provider.getPublicationReal.state) {
+      texto = 'Suspender';
+      color = Color.fromRGBO(0, 102, 204, 1);
+    }else{
+      texto = 'Activar';
+      color = Color.fromRGBO(102, 204, 0, 1);
+    }
+
+    return ButtonTheme(
+          minWidth: 130.0,
+          height: 50.0,
+          child: RaisedButton(
+            padding: EdgeInsets.only(right: 15, left: 15),
+            textColor: Colors.white,
+            color: color,
+            child: Text(texto, style: TextStyle(fontSize: 18),),
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(25),
+            ),
+            onPressed: (){
+              provider.cambiarEstadoPublicacion();
+            },
+          ),
+        );
+
+  }
 }
 
 List<T> map<T>(List list, Function handler) {

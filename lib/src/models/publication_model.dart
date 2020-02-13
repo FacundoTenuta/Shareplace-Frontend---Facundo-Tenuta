@@ -46,7 +46,7 @@ class Publication {
     String title;
     String description;
     DateTime createDate;
-    State state;
+    bool state;
     int userId;
     String principalImage;
     List<Image> images;
@@ -75,7 +75,7 @@ class Publication {
         title: json["title"],
         description: json["description"],
         createDate: DateTime.parse(json["createDate"]),
-        state: stateValues.map[json["state"]],
+        state: json["state"] == 1,
         userId: json["user_id"],
         principalImage: json["principalImage"],
         images: List<Image>.from(json["images"].map((x) => Image.fromJson(x))),
@@ -90,7 +90,7 @@ class Publication {
         "title": titleValues.reverse[title],
         "description": description,
         "createDate": "${createDate.year.toString().padLeft(4, '0')}-${createDate.month.toString().padLeft(2, '0')}-${createDate.day.toString().padLeft(2, '0')}",
-        "state": stateValues.reverse[state],
+        "state": state,
         "user_id": userId,
         "principalImage": principalImage,
         "images": List<dynamic>.from(images.map((x) => x.toJson())),
@@ -247,12 +247,6 @@ class Image {
         "publication_id": publicationId,
     };
 }
-
-enum State { DISPONIBLE }
-
-final stateValues = EnumValues({
-    "disponible": State.DISPONIBLE
-});
 
 enum Title { TITULO_DE_PUBLICACION }
 

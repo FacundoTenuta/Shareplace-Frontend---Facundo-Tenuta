@@ -4,32 +4,12 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:shareplace_flutter/src/pages/profile.dart';
-// import 'package:shareplace_flutter/src/bloc/provider.dart';
-// import 'package:shareplace_flutter/src/pages/profile.dart';
-// import 'package:shareplace_flutter/src/preferencias_usuario/preferencias_usuario.dart';
 import 'package:shareplace_flutter/src/providers/user_provider.dart';
 
 class MenuWidget extends StatelessWidget {
 
-//   @override
-//   _MenuWidgetState createState() => _MenuWidgetState();
-// }
-
-// class _MenuWidgetState extends State<MenuWidget> {
   @override
   Widget build(BuildContext context) {
-
-    // final _prefs = new PreferenciasUsuario();
-
-    print('se crea el menu');
-
-    // final user = Provider.of<UserProvider>(context, listen: true);
-
-    // user.cargarUsuario(_prefs.user);
-
-    // print(user.getUser.name);
-
-    // final bloc = Provider.getMenuBloc(context);
 
     final size = MediaQuery.of(context).size;
 
@@ -45,11 +25,6 @@ class MenuWidget extends StatelessWidget {
                   child: Column(
                     mainAxisAlignment: MainAxisAlignment.spaceAround,
                     children: <Widget>[
-
-                      // StreamBuilder(
-                      //   stream: bloc.avatarStream ,
-                      //   builder: (BuildContext context, AsyncSnapshot snapshot){
-                          // return 
                           Container(
                             child: Consumer<UserProvider>(
                               builder: (_, user, __) => CircleAvatar(
@@ -58,17 +33,9 @@ class MenuWidget extends StatelessWidget {
                               ),
                             ),
                           ),
-                      //   },
-                      // ),
-                      // StreamBuilder(
-                        // stream: bloc.usernameStream,
-                        // builder: (BuildContext context, AsyncSnapshot snapshot){
-                          // return 
                           Container(
                             child: Consumer<UserProvider>(builder: (_, user, __ ) => Text(user.getUser.name + ' ' + user.getUser.lastName)),
                           ),
-                        // },
-                      // ),
                     ],
                   ),
                 ),
@@ -111,14 +78,7 @@ class MenuWidget extends StatelessWidget {
             ListTile(
               leading: Icon(Icons.account_circle),
               title: Text('Mi Perfil'),
-              // onTap: ()=> Navigator.pushNamed(context, 'profile'),
               onTap: ()=> Navigator.push(context, new MaterialPageRoute(builder: (context) => new ProfilePage()),)
-              // .then((value) {
-              //       setState(() {
-                      
-              //       });
-                  // }),
-              // onTap: ()=>  Navigator.,
             ),
 
             ListTile(

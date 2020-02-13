@@ -56,17 +56,21 @@ class _ListaSolicitudesRecibidasState extends State<ListaSolicitudesRecibidas> {
 
   @override
   Widget build(BuildContext context) {
-    return RefreshIndicator(
-      onRefresh: obtenerPagina1,
-      child: ListView.builder(
-        padding: EdgeInsets.only(left: 30, right: 30, top: 10),
-        controller: _scrollController,
-        itemCount: _received.length,
-        itemBuilder: (BuildContext context, int index){
-          return _request(context, _received[index]);
-        },
-      ),
-    );
+    if (_received.isNotEmpty) {
+      return RefreshIndicator(
+        onRefresh: obtenerPagina1,
+        child: ListView.builder(
+          padding: EdgeInsets.only(left: 30, right: 30, top: 10),
+          controller: _scrollController,
+          itemCount: _received.length,
+          itemBuilder: (BuildContext context, int index){
+            return _request(context, _received[index]);
+          },
+        ),
+      );
+    }else{
+      return Center(child: Text('No posee solicitudes recibidas'));
+    }
   }
 
   Future<Null> obtenerPagina1() async {
@@ -126,8 +130,6 @@ class _ListaSolicitudesRecibidasState extends State<ListaSolicitudesRecibidas> {
   Widget _request(BuildContext context, Requestion solicitud){
 
     String fecha = DateFormat('dd/MM/yyyy').format(solicitud.createdAt);
-
-    print(fecha);
     
     return Container(
       child: Column(

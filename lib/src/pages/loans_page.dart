@@ -110,11 +110,8 @@ class _LoansPageState extends State<LoansPage> {
 
     final resp = await publicationsProvider.cargarLoans(prefs.user, _page);
 
-    print(resp.isNotEmpty);
-
     if (resp.isNotEmpty) {
       for (var i = 0; i < resp.length; i++) {
-        print(!_loans.contains(resp[i]));
         if (!_loans.contains(resp[i])) {
           _loans.add(resp[i]);
         } 
@@ -231,7 +228,7 @@ class _LoansPageState extends State<LoansPage> {
   Widget _listaVacia(){
 
     if (_loans.isEmpty) {
-      return Text('No posee publicaciones');
+      return Center(child: Text('No posee prestamos'));
     }else{
       return Container();
     }

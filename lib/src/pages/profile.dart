@@ -1,27 +1,17 @@
 
-// import 'dart:html';
 import 'dart:io';
 
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:provider/provider.dart';
-// import 'package:shareplace_flutter/src/bloc/menu_bloc.dart';
 import 'package:shareplace_flutter/src/models/user_model.dart';
 import 'package:shareplace_flutter/src/preferencias_usuario/preferencias_usuario.dart';
-import 'package:shareplace_flutter/src/providers/avatar_provider.dart';
 import 'package:shareplace_flutter/src/providers/user_provider.dart';
 
 
 
 class ProfilePage extends StatefulWidget {
-//   @override
-//   _ProfilePageState createState() => _ProfilePageState();
-// }
 
-
-  ProfilePage(){
-    
-  }
 
   @override
   _ProfilePageState createState() => _ProfilePageState();
@@ -42,18 +32,6 @@ final prefs = PreferenciasUsuario();
 
   @override
   Widget build(BuildContext context) {
-
-    // final avatarProvider = Provider.of<AvatarProvider>(context, listen: false);
-
-    // UserProvider user = Provider.of<UserProvider>(context, listen: false);
-    // _name = user.getUser.name;
-    // _lastName = user.getUser.lastName;
-    // _mail = user.getUser.email;
-    // _phone = user.getUser.phone.toString();
-    // _description = user.getUser.description;
-    // _image = user.getUser.image;
-
-    // final userProvider = Provider.of<UserProvider>(context);
 
     return Scaffold(
       backgroundColor: Color.fromRGBO(229, 241, 246, 1),
@@ -237,8 +215,6 @@ final prefs = PreferenciasUsuario();
 
     if (snapshot.data.phone != 'null') {
       asd = TextEditingController(text: snapshot.data.phone);
-      print('asdad');
-      print(snapshot.data.phone);
     }else{
       asd = TextEditingController(text: '');
     }
@@ -307,18 +283,13 @@ final prefs = PreferenciasUsuario();
 
   Widget _avatar(AsyncSnapshot<User> snapshot) {
 
-
     ImageProvider imagen;
-
-    print(_image);
 
     if (_image == null) {
       imagen = NetworkImage('http://10.0.2.2/shareplace-backend---facundo-tenuta/public/img/' + snapshot.data.image);
     }else{
       imagen = FileImage(_imageNueva);
     }
-
-    print('se redibuja?');
 
     return Container(
       padding: EdgeInsets.symmetric(vertical: 50),
@@ -337,13 +308,11 @@ final prefs = PreferenciasUsuario();
               child: Icon(Icons.camera_alt),
               onPressed: () async {
                 _imageNueva = await ImagePicker.pickImage(source: ImageSource.gallery);
-                  print(_image);
                 setState(() {
                   if (_imageNueva != null) {
                     _image = _imageNueva.path;
                   }
                 });
-                print(_image);
               },
             ),
           ),
@@ -381,12 +350,5 @@ final prefs = PreferenciasUsuario();
 
   }
 
-  void _seleccionarAvatar() async {
 
-    _imageNueva = await ImagePicker.pickImage(source: ImageSource.gallery);
-
-    // avatarProvider.setAvatar(_imageNueva.path);
-
- 
-  }
 }
