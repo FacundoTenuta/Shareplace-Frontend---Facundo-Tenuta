@@ -142,5 +142,21 @@ class RequestionProvider{
 
   }
 
+  Future eliminarSolicitud(int id) async {
+
+    if (_cargando){
+      return null;
+    }
+
+    _cargando = true;
+
+    final url = Uri.http('10.0.2.2', '/shareplace-backend---facundo-tenuta/public/api/requestions/$id');
+
+    await http.delete(url);
+        
+    _cargando = false;
+
+  }
+
 
 }

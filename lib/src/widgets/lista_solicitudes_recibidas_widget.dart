@@ -130,6 +130,8 @@ class _ListaSolicitudesRecibidasState extends State<ListaSolicitudesRecibidas> {
   Widget _request(BuildContext context, Requestion solicitud){
 
     String fecha = DateFormat('dd/MM/yyyy').format(solicitud.createdAt);
+
+    int id = solicitud.id;
     
     return Container(
       child: Column(
@@ -146,7 +148,13 @@ class _ListaSolicitudesRecibidasState extends State<ListaSolicitudesRecibidas> {
                   heroTag: "btnr" + solicitud.id.toString(),
                   backgroundColor: Color.fromRGBO(206, 80, 80, 1),
                   child: Icon(Icons.clear, size: 20.0,),
-                  onPressed: () {},
+                  onPressed: () async{
+                    await RequestionProvider().eliminarSolicitud(id);
+                    this.obtenerPagina1();
+                    setState(() {
+                      
+                    });
+                  },
                 ),
               ),
             ],

@@ -133,6 +133,8 @@ class _ListaSolicitudesEnviadasState extends State<ListaSolicitudesEnviadas> {
 
     String fecha = DateFormat('dd/MM/yyyy').format(solicitud.createdAt);
 
+    int id = solicitud.id;
+
     return Container(
       child: Column(
         children: <Widget>[
@@ -148,7 +150,13 @@ class _ListaSolicitudesEnviadasState extends State<ListaSolicitudesEnviadas> {
                   heroTag: "btns" + solicitud.id.toString(),
                   backgroundColor: Color.fromRGBO(206, 80, 80, 1),
                   child: Icon(Icons.clear, size: 20.0,),
-                  onPressed: () {},
+                  onPressed: () async{
+                    await RequestionProvider().eliminarSolicitud(id);
+                    this.obtenerPagina1();
+                    setState(() {
+                      
+                    });
+                  },
                 ),
               ),
             ],
