@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:shareplace_flutter/src/models/user_model.dart';
 import 'package:shareplace_flutter/src/providers/user_provider.dart';
 import 'package:shareplace_flutter/src/utils/utils.dart' as utils;
 

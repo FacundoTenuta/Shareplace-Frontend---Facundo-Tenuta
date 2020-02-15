@@ -100,11 +100,11 @@ class UserProvider with ChangeNotifier {
 
   editarUsuario(String _name, String _lastName, String _mail, String _phone, String _description, File _image) async {
 
-    Dio dio = new Dio(
-    //   // BaseOptions(
-    //   //   headers: {contentType: "application/form-data"},
-    //   // )
-    );
+    // Dio dio = new Dio(
+    // //   // BaseOptions(
+    // //   //   headers: {contentType: "application/form-data"},
+    // //   // )
+    // );
     FormData formData = new FormData(); 
 
     if (_cargando){

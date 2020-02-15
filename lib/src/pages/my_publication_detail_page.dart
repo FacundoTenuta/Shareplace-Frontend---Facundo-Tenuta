@@ -151,7 +151,7 @@ class _MyPublicationDetailPageState extends State<MyPublicationDetailPage> {
 
     List<Widget> imagenes = _imagenes(publi);
 
-    final size = MediaQuery.of(context).size;
+    // final size = MediaQuery.of(context).size;
 
     return Stack(
       children: [
