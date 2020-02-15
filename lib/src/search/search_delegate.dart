@@ -1,13 +1,15 @@
 import 'package:flutter/material.dart';
+import 'package:shareplace_flutter/src/models/argumentos_other_profile_model.dart';
 import 'package:shareplace_flutter/src/models/publication_model.dart';
-import 'package:shareplace_flutter/src/providers/publication_provider.dart';
+import 'package:shareplace_flutter/src/providers/busquedas_provider.dart';
+import 'package:shareplace_flutter/src/widgets/resultados_widget.dart';
 
 
 
 class DataSearch extends SearchDelegate{
 
   String seleccion = '';
-  final publicationsProvider = new PublicationProvider();
+  final busquedasProvider = new BusquedasProvider();
 
   // final peliculas = [
   //   'Spiderman',
@@ -56,14 +58,12 @@ class DataSearch extends SearchDelegate{
   @override
   Widget buildResults(BuildContext context) {
     // Crea los resultados que vamos a mostrar
-    return Center(
-      child: Container(
-        height: 100.0,
-        width: 100.0,
-        color: Colors.blueAccent,
-        child: Text(seleccion),
-      ),
-    );
+    if (query.isEmpty) {
+      return Container();
+    }else{
+      return Resultados(query);
+    }
+
   }
 
   @override
@@ -74,8 +74,10 @@ class DataSearch extends SearchDelegate{
       return Container();
     }
 
+    String url = 'http://10.0.2.2/shareplace-backend---facundo-tenuta/public/img/';
+
     return FutureBuilder(
-      future: publicationsProvider.buscarPublication(query),
+      future: busquedasProvider.buscarPublication(query, 1),
       builder: (BuildContext context, AsyncSnapshot<List<Publication>> snapshot) {
         
         if (snapshot.hasData) {
@@ -86,9 +88,9 @@ class DataSearch extends SearchDelegate{
             children: publications.map((publication){
               return ListTile(
                 leading: FadeInImage(
-                  // image: NetworkImage(publication.principalImage),
-                  image: AssetImage('assets/camara.jpg'),
-                  placeholder: AssetImage('assets/img/no-image.jpg'),
+                  image: NetworkImage(url + publication.principalImage),
+                  // image: AssetImage('assets/camara.jpg'),
+                  placeholder: AssetImage('assets/img/loading.jpg'),
                   width: 50.0,
                   fit: BoxFit.contain,
                 ),
@@ -96,8 +98,9 @@ class DataSearch extends SearchDelegate{
                 // subtitle: Text(publication.originalTitle),
                 onTap: (){
                   close(context, null);
+                  ArgumentosOtherProfile arg = ArgumentosOtherProfile(publication, true);
                   // publication.uniqueId = '';
-                  Navigator.pushNamed(context, 'publicationDetail');
+                  Navigator.pushNamed(context, 'publicationDetail', arguments: arg);
                 },
               );
             }).toList(),
@@ -113,31 +116,5 @@ class DataSearch extends SearchDelegate{
     );
 
   }
-
-  // @override
-  // Widget buildSuggestions(BuildContext context) {
-  //   // Son las sugerencias que aparecen cuando la persona escribe
-
-  //   final listaSugerida = (query.isEmpty)
-  //                           ? peliculasRecientes
-  //                           : peliculas.where(
-  //                             (p)=> p.toLowerCase().startsWith(query.toLowerCase())
-  //                           ).toList();
-
-
-  //   return ListView.builder(
-  //     itemCount: listaSugerida.length,
-  //     itemBuilder: (context, i){
-  //       return ListTile(
-  //         leading: Icon(Icons.movie),
-  //         title: Text(listaSugerida[i]),
-  //         onTap: (){
-  //           seleccion = listaSugerida[i];
-  //           showResults(context);
-  //         },
-  //       );
-  //     },
-  //   );
-  // }
 
 }
