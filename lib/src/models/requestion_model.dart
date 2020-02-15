@@ -79,8 +79,8 @@ class Requestion {
         reason: json["reason"],
         active: json["active"] == 1,
         isLoan: json["isLoan"] == 1,
-        startDate: json["startDate"],
-        endDate: json["endDate"],
+        startDate: DateTime.parse(json["startDate"]),
+        endDate: DateTime.parse(json["endDate"]),
         publicationId: json["publication_id"],
         requesterId: json["requester_id"],
     );
@@ -95,8 +95,8 @@ class Requestion {
         "reason": reason,
         "active": active,
         "isLoan": isLoan,
-        "startDate": startDate,
-        "endDate": endDate,
+        "startDate": "${startDate.year.toString().padLeft(4, '0')}-${startDate.month.toString().padLeft(2, '0')}-${startDate.day.toString().padLeft(2, '0')}",
+        "endDate": "${endDate.year.toString().padLeft(4, '0')}-${endDate.month.toString().padLeft(2, '0')}-${endDate.day.toString().padLeft(2, '0')}",
         "publication_id": publicationId,
         "requester_id": requesterId,
     };

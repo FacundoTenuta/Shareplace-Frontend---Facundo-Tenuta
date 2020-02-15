@@ -5,6 +5,7 @@ import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'package:shareplace_flutter/src/models/publication_model.dart' as model;
+import 'package:shareplace_flutter/src/preferencias_usuario/preferencias_usuario.dart';
 // import 'dart:core';
 // import 'dart:async';
 
@@ -12,6 +13,8 @@ import 'package:shareplace_flutter/src/models/publication_model.dart' as model;
 class PublicationProvider with ChangeNotifier {
 
   // final _publicationsController = BehaviorSubject<List<Publication>>();
+
+  final _prefs = new PreferenciasUsuario();
 
   int _lastPage;
   bool _cargando = false;
@@ -373,6 +376,31 @@ class PublicationProvider with ChangeNotifier {
   void setEstado(bool estado) {
     this._publicationReal.state = estado;
     notifyListeners();
+  }
+
+  void solicitarPublicacion(String motivo) async{
+
+    if (_cargando){
+      return null;
+    }
+
+    _cargando = true;
+
+    int user = _prefs.user;
+
+    model.Publication publi = this.getPublication;
+
+    final url = Uri.http('10.0.2.2', '/shareplace-backend---facundo-tenuta/public/api/requestions', {
+      'user'        : user.toString(),
+      'publication' : publi.id.toString(),
+      'title'       : publi.title,
+      'reason'      : motivo,
+    });
+
+    await http.post(url);
+
+    _cargando = false;
+
   }
 
 }
