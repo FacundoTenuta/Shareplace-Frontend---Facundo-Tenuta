@@ -3,11 +3,14 @@
 
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 import 'package:shareplace_flutter/src/models/argumentos_other_profile_model.dart';
 import 'package:shareplace_flutter/src/models/publication_model.dart' as model;
 import 'package:shareplace_flutter/src/models/user_model.dart';
+import 'package:shareplace_flutter/src/providers/publication_provider.dart';
 import 'package:shareplace_flutter/src/providers/user_provider.dart';
 import 'package:shareplace_flutter/src/widgets/menu_widget.dart';
+import 'package:shareplace_flutter/src/widgets/request_modal_widget.dart';
 
 class PublicationDetailPage extends StatefulWidget{
 
@@ -25,6 +28,8 @@ class _PublicationDetailPageState extends State<PublicationDetailPage> {
   Widget build(BuildContext context) {
 
     ArgumentosOtherProfile arg = ModalRoute.of(context).settings.arguments;
+
+    
 
     final model.Publication publi = arg.publi;
 
@@ -51,6 +56,8 @@ class _PublicationDetailPageState extends State<PublicationDetailPage> {
   }
 
   Widget _publicacion(BuildContext context, model.Publication publi) {
+
+    final publicationProvider = Provider.of<PublicationProvider>(context);
 
     return SingleChildScrollView(
       child: Column(
@@ -94,7 +101,13 @@ class _PublicationDetailPageState extends State<PublicationDetailPage> {
               shape: RoundedRectangleBorder(
                 borderRadius: BorderRadius.circular(25),
               ),
-              onPressed: (){},
+              onPressed: (){
+                publicationProvider.setPublication(publi);
+                showDialog(
+                  context: context,
+                  builder: (_) => LogoutOverlay(),
+                );
+              },
             ),
           ),
           SizedBox(height: 20.0),
@@ -195,7 +208,7 @@ class _PublicationDetailPageState extends State<PublicationDetailPage> {
 
     List<Widget> imagenes = _imagenes(publi);
 
-    final size = MediaQuery.of(context).size;
+    // final size = MediaQuery.of(context).size;
 
     return Stack(
       children: [
@@ -278,7 +291,7 @@ class _PublicationDetailPageState extends State<PublicationDetailPage> {
 
   }
 
-  List<Widget> _conditionsList(model.Publication publi) {}
+  // List<Widget> _conditionsList(model.Publication publi) {}
 }
 
 List<T> map<T>(List list, Function handler) {
