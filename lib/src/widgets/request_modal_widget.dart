@@ -15,6 +15,9 @@ class LogoutOverlay extends StatefulWidget {
 
           String motivo;
 
+          DateTime desde = DateTime.now();
+          DateTime hasta = DateTime.now();
+
       AnimationController controller;
       Animation<double> scaleAnimation;
 
@@ -47,7 +50,7 @@ class LogoutOverlay extends StatefulWidget {
               child: Container(
                 // margin: EdgeInsets.(20.0),
                   padding: EdgeInsets.all(15.0),
-                  height: 450.0,
+                  height: 490.0,
                   width: 325,
                   decoration: ShapeDecoration(
                       color: Color.fromRGBO(229, 241, 246, 1),
@@ -63,7 +66,7 @@ class LogoutOverlay extends StatefulWidget {
                           child: Stack(
                             children: <Widget>[
                               Container(
-                                margin: EdgeInsets.only(top: 10, bottom: 20),
+                                margin: EdgeInsets.only(top: 10, bottom: 10),
                                 child: Text('Solicitud', style: TextStyle(fontSize: 20),),
                               ),
                             ],
@@ -71,7 +74,7 @@ class LogoutOverlay extends StatefulWidget {
                         ),
 
                         Container(
-                          margin: EdgeInsets.only(top: 20, bottom: 10),
+                          margin: EdgeInsets.only(top: 10, bottom: 10),
                             // child: Padding(
                           // padding: const EdgeInsets.only(
                               // top: 30.0, left: 20.0, right: 20.0),
@@ -84,7 +87,7 @@ class LogoutOverlay extends StatefulWidget {
                         Flexible(
                           child: Container(
                             width: 280,
-                            height: 240,
+                            height: 200,
                             padding: EdgeInsets.only(left: 15.0, right: 15.0),
                             child: TextFormField(
                               textInputAction: TextInputAction.done,
@@ -100,6 +103,19 @@ class LogoutOverlay extends StatefulWidget {
                             ),
                           ),
                         ),
+
+                        Container(
+                          margin: EdgeInsets.only(top: 20),
+                          child: Text('Fechas estimadas', style: TextStyle(fontSize: 16, fontStyle: FontStyle.italic, fontWeight: FontWeight.bold, color: Color.fromRGBO(149, 152, 154, 0.85)),),
+                        ),
+
+
+                        _fechaDesde(context),
+
+
+
+                        _fechaHasta(context),
+                        
 
                         Container(
                           margin: EdgeInsets.only(top: 10),
@@ -130,7 +146,7 @@ class LogoutOverlay extends StatefulWidget {
 
                                         formKey.currentState.save();
 
-                                        publicationProvider.solicitarPublicacion(motivo);
+                                        publicationProvider.solicitarPublicacion(motivo, desde, hasta);
                                         
                                         // Route route = MaterialPageRoute(
                                         //     builder: (context) => LoginScreen());
@@ -148,4 +164,76 @@ class LogoutOverlay extends StatefulWidget {
           ),
         );
       }
-    }
+
+  Widget _fechaHasta(BuildContext context) {
+
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.center,
+      children: <Widget>[
+        Container(
+          margin: EdgeInsets.only(right: 15),
+          child: Text('Hasta:', style: TextStyle(fontSize: 15, fontStyle: FontStyle.italic, color: Color.fromRGBO(149, 152, 154, 1)),)
+        ),
+        Container(
+          width: 80,
+          height: 20,
+          padding: EdgeInsets.only(top: 2),
+          child: Text(hasta.day.toString() + '/' + hasta.month.toString() + '/' + hasta.year.toString()),
+        ),
+        Container(
+          child: IconButton(
+            icon: Icon(Icons.calendar_today, color: Color.fromRGBO(0, 0, 238, 1),),
+            onPressed: (){
+              showDatePicker(
+                context: context,
+                initialDate: desde,
+                firstDate: DateTime.now().subtract(Duration(days: 1)),
+                lastDate: DateTime(2030),
+              ).then((date){
+                setState(() {
+                  hasta = date;
+                });
+              });
+            }
+          ),
+        )
+      ],
+    );
+  }
+
+  Widget _fechaDesde(BuildContext context) {
+
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.center,
+      children: <Widget>[
+        Container(
+          margin: EdgeInsets.only(right: 15),
+          child: Text('Desde:', style: TextStyle(fontSize: 15, fontStyle: FontStyle.italic, color: Color.fromRGBO(149, 152, 154, 1)),)
+        ),
+        Container(
+          width: 80,
+          height: 20,
+          padding: EdgeInsets.only(top: 2),
+          child: Text(desde.day.toString() + '/' + desde.month.toString() + '/' + desde.year.toString()),
+        ),
+        Container(
+          child: IconButton(
+            icon: Icon(Icons.calendar_today, color: Color.fromRGBO(0, 0, 238, 1),),
+            onPressed: (){
+              showDatePicker(
+                context: context,
+                initialDate: desde,
+                firstDate: DateTime.now().subtract(Duration(days: 1)),
+                lastDate: DateTime(2030),
+              ).then((date){
+                setState(() {
+                  desde = date;
+                });
+              });
+            }
+          ),
+        )
+      ],
+    );
+  }
+}

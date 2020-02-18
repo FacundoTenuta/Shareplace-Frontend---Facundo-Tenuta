@@ -34,7 +34,7 @@ class RequestionProvider{
 
     _requestions.addAll(resp);
 
-    requestionsSink(_requestions);
+    // requestionsSink(_requestions);
     
     _cargando = false;
 
@@ -58,7 +58,7 @@ class RequestionProvider{
 
     _requestions.addAll(resp);
 
-    requestionsSink(_requestions);
+    // requestionsSink(_requestions);
     
     _cargando = false;
 
@@ -82,7 +82,7 @@ class RequestionProvider{
 
     _requestions.addAll(resp);
 
-    requestionsSink(_requestions);
+    // requestionsSink(_requestions);
     
     _cargando = false;
 
@@ -106,7 +106,7 @@ class RequestionProvider{
 
     _requestions.addAll(resp);
 
-    requestionsSink(_requestions);
+    // requestionsSink(_requestions);
     
     _cargando = false;
 
@@ -115,15 +115,15 @@ class RequestionProvider{
   }
 
 
-  final _requestionsStreamController = StreamController<List<Requestion>>.broadcast();
+  // final _requestionsStreamController = StreamController<List<Requestion>>.broadcast();
 
-    Stream<List<Requestion>> get requestionsStream => _requestionsStreamController.stream;
+  //   Stream<List<Requestion>> get requestionsStream => _requestionsStreamController.stream;
 
-    Function(List<Requestion>) get requestionsSink => _requestionsStreamController.sink.add;
+  //   Function(List<Requestion>) get requestionsSink => _requestionsStreamController.sink.add;
 
-    void disposeStreams(){
-    _requestionsStreamController?.close();
-  }
+  //   void disposeStreams(){
+  //   _requestionsStreamController?.close();
+  // }
 
 
 

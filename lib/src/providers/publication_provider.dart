@@ -378,7 +378,7 @@ class PublicationProvider with ChangeNotifier {
     notifyListeners();
   }
 
-  void solicitarPublicacion(String motivo) async{
+  void solicitarPublicacion(String motivo, DateTime desde, DateTime hasta) async{
 
     if (_cargando){
       return null;
@@ -395,11 +395,36 @@ class PublicationProvider with ChangeNotifier {
       'publication' : publi.id.toString(),
       'title'       : publi.title,
       'reason'      : motivo,
+      'fromDate'    : desde.toString(),
+      'untilDate'   : hasta.toString(),
     });
 
     await http.post(url);
 
     _cargando = false;
+
+  }
+
+  Future<model.Publication> obtenerPublicacion(int id) async {
+
+    if (_cargando){
+      return null;
+    }
+
+    _cargando = true;    
+
+    final url = Uri.http('10.0.2.2', '/shareplace-backend---facundo-tenuta/public/api/publications/$id');
+
+    final resp = await http.get(url);
+    final decodedData = json.decode(resp.body);
+
+    // print(decodedData);
+
+    final publication = model.Publication.fromJson(decodedData['data']);
+    
+    _cargando = false;
+
+    return publication;
 
   }
 

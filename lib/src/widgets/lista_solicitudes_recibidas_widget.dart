@@ -133,35 +133,45 @@ class _ListaSolicitudesRecibidasState extends State<ListaSolicitudesRecibidas> {
 
     int id = solicitud.id;
     
-    return Container(
-      child: Column(
-        children: <Widget>[
-          Row(
-            mainAxisAlignment: MainAxisAlignment.spaceAround,
-            children: <Widget>[
-              Text(solicitud.title),
-              Text(fecha),
-              SizedBox(
-                width: 22.0,
-                height: 22.0,
-                child: FloatingActionButton(
-                  heroTag: "btnr" + solicitud.id.toString(),
-                  backgroundColor: Color.fromRGBO(206, 80, 80, 1),
-                  child: Icon(Icons.clear, size: 20.0,),
-                  onPressed: () async{
-                    await RequestionProvider().eliminarSolicitud(id);
-                    this.obtenerPagina1();
-                    setState(() {
-                      
-                    });
-                  },
-                ),
+    return GestureDetector(
+      child: Container(
+        child: Column(
+          children: <Widget>[
+            Container(
+              padding: EdgeInsets.only(top:5, bottom: 5),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: <Widget>[
+                  Container(
+                    child: Text(solicitud.title)
+                  ),
+                  Text(fecha),
+                  SizedBox(
+                    width: 22.0,
+                    height: 22.0,
+                    child: FloatingActionButton(
+                      heroTag: "btnr" + solicitud.id.toString(),
+                      backgroundColor: Color.fromRGBO(206, 80, 80, 1),
+                      child: Icon(Icons.clear, size: 20.0,),
+                      onPressed: () async{
+                        await RequestionProvider().eliminarSolicitud(id);
+                        this.obtenerPagina1();
+                        setState(() {
+                          
+                        });
+                      },
+                    ),
+                  ),
+                ],
               ),
-            ],
-          ),
-          Divider()
-        ],
+            ),
+            Divider()
+          ],
+        ),
       ),
+      onTap: (){
+        Navigator.pushNamed(context, 'requestReceivedDetail', arguments: solicitud);
+      },
     );
   }
 

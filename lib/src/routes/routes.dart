@@ -13,22 +13,26 @@ import 'package:shareplace_flutter/src/pages/new_publication_page.dart';
 import 'package:shareplace_flutter/src/pages/other_profile_page.dart';
 import 'package:shareplace_flutter/src/pages/profile.dart';
 import 'package:shareplace_flutter/src/pages/publication_detail_page.dart';
+import 'package:shareplace_flutter/src/pages/request_received_detail_page.dart';
+import 'package:shareplace_flutter/src/pages/request_sent_detail_page.dart';
 import 'package:shareplace_flutter/src/pages/requests_page.dart';
 
 Map<String, WidgetBuilder> getApplicationRoutes(){
   return <String, WidgetBuilder>{
-    'home'                : (BuildContext context) => HomePage(),
-    'login'               : (BuildContext context) => LoginPage(),
-    'publicationDetail'   : (BuildContext context) => PublicationDetailPage(),
-    'myPublications'      : (BuildContext context) => MyPublicationsPage(),
-    'myPublicationsDetail': (BuildContext context) => MyPublicationDetailPage(),
-    'editPublicationPage' : (BuildContext context) => EditPublicationPage(),
-    'newPublicationPage'  : (BuildContext context) => NewPublicationPage(),
-    'loans'               : (BuildContext context) => LoansPage(),
-    'profile'             : (BuildContext context) => ProfilePage(),
-    'otherProfile'        : (BuildContext context) => OtherProfilePage(),
-    'loansHistoric'       : (BuildContext context) => LoansHistoricPage(),
-    'requests'            : (BuildContext context) => RequestsPage(),
-    'info'                : (BuildContext context) => InfoPage(),
+    'home'                  : (BuildContext context) => HomePage(),
+    'login'                 : (BuildContext context) => LoginPage(),
+    'publicationDetail'     : (BuildContext context) => PublicationDetailPage(),
+    'myPublications'        : (BuildContext context) => MyPublicationsPage(),
+    'myPublicationsDetail'  : (BuildContext context) => MyPublicationDetailPage(),
+    'editPublicationPage'   : (BuildContext context) => EditPublicationPage(),
+    'newPublicationPage'    : (BuildContext context) => NewPublicationPage(),
+    'loans'                 : (BuildContext context) => LoansPage(),
+    'profile'               : (BuildContext context) => ProfilePage(),
+    'otherProfile'          : (BuildContext context) => OtherProfilePage(),
+    'loansHistoric'         : (BuildContext context) => LoansHistoricPage(),
+    'requests'              : (BuildContext context) => RequestsPage(),
+    'requestSentDetail'     : (BuildContext context) => RequestSentDetailPage(),
+    'requestReceivedDetail' : (BuildContext context) => RequestReceivedDetailPage(),
+    'info'                  : (BuildContext context) => InfoPage(),
   };
 }
