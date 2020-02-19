@@ -62,7 +62,7 @@ class RequestSentDetailPage extends StatelessWidget {
           ),
           Container(
             margin: EdgeInsets.only(top: 10),
-            child: _fechaDesde(solicitud.startDate)
+            child: _fechaDesde(solicitud.fromDate)
           ),
           Container(
             margin: EdgeInsets.only(top: 5),
@@ -86,7 +86,7 @@ class RequestSentDetailPage extends StatelessWidget {
 
   }
 
-  Widget _fechaHasta(DateTime untilDate) {
+  Widget _fechaHasta(DateTime fromDate) {
     return Row(
       mainAxisAlignment: MainAxisAlignment.center,
       children: <Widget>[
@@ -96,17 +96,17 @@ class RequestSentDetailPage extends StatelessWidget {
         ),
         Container(
           margin: EdgeInsets.only(right: 5),
-          child: Text(untilDate.day.toString())
+          child: Text(fromDate.day.toString())
         ),
         Text('/'),
         Container(
           margin: EdgeInsets.only(right: 5, left: 5),
-          child: Text(untilDate.month.toString())
+          child: Text(fromDate.month.toString())
         ),
         Text('/'),
         Container(
           margin: EdgeInsets.only(left: 5),
-          child: Text(untilDate.year.toString())
+          child: Text(fromDate.year.toString())
         ),
       ],
     );

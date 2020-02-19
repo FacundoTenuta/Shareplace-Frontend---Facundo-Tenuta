@@ -73,7 +73,7 @@ class RequestReceivedDetailPage extends StatelessWidget {
           ),
           Container(
             margin: EdgeInsets.only(top: 10),
-            child: _fechaDesde(solicitud.startDate)
+            child: _fechaDesde(solicitud.fromDate)
           ),
           Container(
             margin: EdgeInsets.only(top: 5),
@@ -123,7 +123,7 @@ class RequestReceivedDetailPage extends StatelessWidget {
     );
   }
 
-  Widget _fechaDesde(DateTime startDate) {
+  Widget _fechaDesde(DateTime fromDate) {
     return Row(
       mainAxisAlignment: MainAxisAlignment.center,
       children: <Widget>[
@@ -133,17 +133,17 @@ class RequestReceivedDetailPage extends StatelessWidget {
         ),
         Container(
           margin: EdgeInsets.only(right: 5),
-          child: Text(startDate.day.toString())
+          child: Text(fromDate.day.toString())
         ),
         Text('/'),
         Container(
           margin: EdgeInsets.only(right: 5, left: 5),
-          child: Text(startDate.month.toString())
+          child: Text(fromDate.month.toString())
         ),
         Text('/'),
         Container(
           margin: EdgeInsets.only(left: 5),
-          child: Text(startDate.year.toString())
+          child: Text(fromDate.year.toString())
         ),
       ],
     );
@@ -301,8 +301,9 @@ class RequestReceivedDetailPage extends StatelessWidget {
             onPressed: (){
               // formKey.currentState.save();
               // publicationProvider.editarPublicacion(_imagePrincipal);
+              RequestionProvider().transformarPrestamo(id);
 
-              Navigator.pop(context);
+              Navigator.popAndPushNamed(context, 'requests');
 
             },
           ),

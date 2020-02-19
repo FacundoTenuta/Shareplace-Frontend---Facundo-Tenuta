@@ -92,8 +92,6 @@ class UserProvider with ChangeNotifier {
     // print(decodedData);
 
     final user = User.fromJson(decodedData['data']);
-    print('consume');
-
     return user;
 
   }

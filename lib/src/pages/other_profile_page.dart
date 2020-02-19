@@ -28,14 +28,9 @@ class _OtherProfilePageState extends State<OtherProfilePage> {
   void initState() {
     super.initState();
 
-    print('asdads');
-    
-    // _cargarMisPublicaciones();
-
     _scrollController.addListener((){
 
       if (_scrollController.position.pixels == _scrollController.position.maxScrollExtent) {
-        print('scroll');
         fetchData();
       }
 
@@ -46,8 +41,6 @@ class _OtherProfilePageState extends State<OtherProfilePage> {
   Widget build(BuildContext context) {
 
     user = ModalRoute.of(context).settings.arguments;
-
-    // print(user.id);
 
     return Scaffold(
       backgroundColor: Color.fromRGBO(229, 241, 246, 1),
@@ -270,9 +263,6 @@ class _OtherProfilePageState extends State<OtherProfilePage> {
   void _cargarMisPublicaciones() async{
 
     final resp = await publicationsProvider.cargarMisPublications(user.id, _page);
-
-    print('carga');
-    print(_page);
 
     if (resp.isNotEmpty) {
       for (var i = 0; i < resp.length; i++) {

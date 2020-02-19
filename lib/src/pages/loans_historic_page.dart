@@ -112,7 +112,7 @@ class _LoansHistoricPageState extends State<LoansHistoricPage> {
 
   void _cargarPrestamos() async{
 
-    final resp = await publicationsProvider.cargarLoans(prefs.user, _page);
+    final resp = await publicationsProvider.cargarLoansHistoric(prefs.user, _page);
 
     if (resp.isNotEmpty) {
       for (var i = 0; i < resp.length; i++) {
