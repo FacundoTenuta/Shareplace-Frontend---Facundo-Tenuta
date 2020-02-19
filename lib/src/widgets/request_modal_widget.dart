@@ -186,7 +186,7 @@ class LogoutOverlay extends StatefulWidget {
             onPressed: (){
               showDatePicker(
                 context: context,
-                initialDate: desde,
+                initialDate: hasta,
                 firstDate: DateTime.now().subtract(Duration(days: 1)),
                 lastDate: DateTime(2030),
               ).then((date){
