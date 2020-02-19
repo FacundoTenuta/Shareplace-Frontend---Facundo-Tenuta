@@ -4,6 +4,7 @@ import 'package:shareplace_flutter/src/pages/edit_publication_page.dart';
 
 import 'package:shareplace_flutter/src/pages/home_page.dart';
 import 'package:shareplace_flutter/src/pages/info_page.dart';
+import 'package:shareplace_flutter/src/pages/loan_detail_page.dart';
 import 'package:shareplace_flutter/src/pages/loans_page.dart';
 import 'package:shareplace_flutter/src/pages/loans_historic_page.dart';
 import 'package:shareplace_flutter/src/pages/login_page.dart';
@@ -27,6 +28,7 @@ Map<String, WidgetBuilder> getApplicationRoutes(){
     'editPublicationPage'   : (BuildContext context) => EditPublicationPage(),
     'newPublicationPage'    : (BuildContext context) => NewPublicationPage(),
     'loans'                 : (BuildContext context) => LoansPage(),
+    'loanDetail'            : (BuildContext context) => LoanDetailPage(),
     'profile'               : (BuildContext context) => ProfilePage(),
     'otherProfile'          : (BuildContext context) => OtherProfilePage(),
     'loansHistoric'         : (BuildContext context) => LoansHistoricPage(),

@@ -98,7 +98,7 @@ class RequestionProvider{
 
     _cargando = true;
 
-    final url = Uri.http('10.0.2.2', '/shareplace-backend---facundo-tenuta/public/api/users/$userId/loans', {
+    final url = Uri.http('10.0.2.2', '/shareplace-backend---facundo-tenuta/public/api/users/$userId/loansHistoric', {
       'page'    : page.toString(),
     });
 
@@ -153,6 +153,48 @@ class RequestionProvider{
     final url = Uri.http('10.0.2.2', '/shareplace-backend---facundo-tenuta/public/api/requestions/$id');
 
     await http.delete(url);
+        
+    _cargando = false;
+
+  }
+
+  Future transformarPrestamo(int id) async {
+
+    if (_cargando){
+      return null;
+    }
+
+    _cargando = true;
+
+    print(DateTime.now().toString());
+
+    final url = Uri.http('10.0.2.2', '/shareplace-backend---facundo-tenuta/public/api/loans/$id', {
+      'isLoan'          : '1',
+      'startDate'       : DateTime.now().toString(),
+      'active'          : '1',
+    });
+
+    await http.put(url);
+        
+    _cargando = false;
+
+  }
+
+  Future finalizarPrestamo(int id) async {
+
+    if (_cargando){
+      return null;
+    }
+
+    _cargando = true;
+
+    final url = Uri.http('10.0.2.2', '/shareplace-backend---facundo-tenuta/public/api/loans/$id', {
+      'active'          : '0',
+      'endDate'         : DateTime.now().toString(),
+      'isLoan'          : '1',
+    });
+
+    await http.put(url);
         
     _cargando = false;
 
