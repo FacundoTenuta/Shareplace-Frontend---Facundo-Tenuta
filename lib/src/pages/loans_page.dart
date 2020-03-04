@@ -1,4 +1,5 @@
 
+import 'package:animate_do/animate_do.dart';
 import 'package:flutter/material.dart';
 import 'package:shareplace_flutter/src/models/publication_model.dart';
 import 'package:shareplace_flutter/src/models/requestion_model.dart';
@@ -93,7 +94,10 @@ class _LoansPageState extends State<LoansPage> {
         controller: _scrollController,
         itemCount: _loans.length,
         itemBuilder: (BuildContext context, int index){
-          return _loan(context, _loans[index]);
+          return FadeIn(
+            child: _loan(context, _loans[index]),
+            duration: Duration(seconds: 1),
+          );
         },
       ),
     );

@@ -1,5 +1,6 @@
 
 
+import 'package:animate_do/animate_do.dart';
 import 'package:flutter/material.dart';
 
 bool isNumeric(String s){
@@ -17,15 +18,18 @@ void mostrarAlerta(BuildContext context, String titulo, String mensaje){
   showDialog(
     context: context,
     builder: (context){
-      return AlertDialog(
-        title: Text(titulo),
-        content: Text(mensaje),
-        actions: <Widget>[
-          FlatButton(
-            child: Text('ok'),
-            onPressed: ()=> Navigator.of(context).pop(),
-          )
-        ],
+      return FadeIn(
+        child: AlertDialog(
+          title: Text(titulo),
+          content: Text(mensaje),
+          actions: <Widget>[
+            FlatButton(
+              child: Text('ok'),
+              onPressed: ()=> Navigator.of(context).pop(),
+            )
+          ],
+        ),
+        duration: Duration(milliseconds: 250),
       );
     }
   );

@@ -1,5 +1,6 @@
 import 'dart:async';
 
+import 'package:animate_do/animate_do.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:shareplace_flutter/src/models/publication_model.dart' as model;
@@ -106,7 +107,10 @@ class _MyPublicationsState extends State<MyPublicationsPage> {
         controller: _scrollController,
         itemCount: _publications.length,
         itemBuilder: (BuildContext context, int index){
-          return _publication(context, _publications[index]);
+          return FadeIn(
+            child: _publication(context, _publications[index]),
+            duration: Duration(seconds: 1),
+          );
         },
       ),
     );

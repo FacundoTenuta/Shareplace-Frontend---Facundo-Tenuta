@@ -1,5 +1,6 @@
 import 'dart:async';
 
+import 'package:animate_do/animate_do.dart';
 import 'package:flutter/material.dart';
 import 'package:shareplace_flutter/src/models/argumentos_other_profile_model.dart';
 import 'package:shareplace_flutter/src/models/publication_model.dart' as model;
@@ -231,7 +232,10 @@ class _OtherProfilePageState extends State<OtherProfilePage> {
             // controller: _scrollController,
             itemCount: _publications.length,
             itemBuilder: (BuildContext context, int index){
-              return _publication(context, _publications[index]);
+              return FadeIn(
+                child: _publication(context, _publications[index]),
+                duration: Duration(seconds: 1),
+              );
             },
           );
       }else{
