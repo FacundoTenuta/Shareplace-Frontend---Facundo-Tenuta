@@ -226,7 +226,7 @@ class _LoansHistoricPageState extends State<LoansHistoricPage> {
         ),
       ),
       onTap: (){
-        Navigator.pushNamed(context, 'publicationDetail', arguments: loan);
+        Navigator.pushNamed(context, 'loanDetail', arguments: loan);
       },
     );
   }

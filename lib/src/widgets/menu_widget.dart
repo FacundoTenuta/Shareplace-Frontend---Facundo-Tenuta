@@ -90,7 +90,7 @@ class MenuWidget extends StatelessWidget {
             ListTile(
               leading: Icon(Icons.power_settings_new),
               title: Text('Cerrar Sesion'),
-              onTap: ()=> Navigator.pushNamed(context, 'login'),
+              onTap: ()=> Navigator.pushNamedAndRemoveUntil(context, 'login', (Route<dynamic> route) => false),
             ),
           ],
         ),

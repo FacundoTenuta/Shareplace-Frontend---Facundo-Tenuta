@@ -26,8 +26,6 @@ class MyApp extends StatelessWidget {
         ChangeNotifierProvider<UserProvider>(create: (context) => UserProvider()),
         ChangeNotifierProvider<PublicationProvider>(create: (context) => PublicationProvider()),
       ],
-    // return ChangeNotifierProvider<UserProvider>(
-    //   create: (context) => UserProvider(),
       child: MaterialApp(
         title: 'Shareplace',
         debugShowCheckedModeBanner: false,
