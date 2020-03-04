@@ -7,6 +7,7 @@ import 'package:shareplace_flutter/src/providers/publication_provider.dart';
 import 'package:shareplace_flutter/src/providers/requestion_provider.dart';
 import 'package:shareplace_flutter/src/search/search_delegate.dart';
 import 'package:shareplace_flutter/src/widgets/menu_widget.dart';
+import 'package:shareplace_flutter/src/utils/utils.dart' as utils;
 
 
 
@@ -305,9 +306,18 @@ class _LoansPageState extends State<LoansPage> {
                 shape: RoundedRectangleBorder(
                   borderRadius: BorderRadius.circular(25),
                 ),
-                onPressed: (){
-                  RequestionProvider().finalizarPrestamo(id);
+                onPressed: ()async{
+                  String respuesta = await RequestionProvider().finalizarPrestamo(id);
                   Navigator.popAndPushNamed(context, 'loans');
+                  if (respuesta == '200') {
+
+                    utils.mostrarAlerta(context, 'Tu prestamo', 'Se finalizó tu prestamo correctamente.');
+
+                  }else{
+
+                    utils.mostrarAlerta(context, 'Ops! Algo salió mal', 'Hubo un problema al intentar finalizar tu prestamo.');
+
+                  }   
                 },
               ),
             );

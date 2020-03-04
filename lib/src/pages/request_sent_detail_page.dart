@@ -6,6 +6,7 @@ import 'package:shareplace_flutter/src/models/publication_model.dart';
 import 'package:shareplace_flutter/src/models/requestion_model.dart';
 import 'package:shareplace_flutter/src/providers/publication_provider.dart';
 import 'package:shareplace_flutter/src/providers/requestion_provider.dart';
+import 'package:shareplace_flutter/src/utils/utils.dart' as utils;
 
 
 class RequestSentDetailPage extends StatelessWidget {
@@ -234,8 +235,18 @@ class RequestSentDetailPage extends StatelessWidget {
               borderRadius: BorderRadius.circular(25),
             ),
             onPressed: () async {
-              await RequestionProvider().eliminarSolicitud(id);
+              String respuesta = await RequestionProvider().eliminarSolicitud(id);
               Navigator.popAndPushNamed(context, 'requests');
+
+              if (respuesta == '200') {
+
+                utils.mostrarAlerta(context, 'Solicitud', 'La solicitud se elimino correctamente.');
+
+              }else{
+
+                utils.mostrarAlerta(context, 'Ops! Algo salió mal', 'Hubo un problema al eliminar la solicitud.');
+
+              }  
             },
           ),
         ),

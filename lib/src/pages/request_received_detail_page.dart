@@ -10,6 +10,7 @@ import 'package:shareplace_flutter/src/models/user_model.dart';
 import 'package:shareplace_flutter/src/providers/publication_provider.dart';
 import 'package:shareplace_flutter/src/providers/requestion_provider.dart';
 import 'package:shareplace_flutter/src/providers/user_provider.dart';
+import 'package:shareplace_flutter/src/utils/utils.dart' as utils;
 
 
 class RequestReceivedDetailPage extends StatelessWidget {
@@ -298,12 +299,22 @@ class RequestReceivedDetailPage extends StatelessWidget {
             shape: RoundedRectangleBorder(
               borderRadius: BorderRadius.circular(25),
             ),
-            onPressed: (){
+            onPressed: ()async{
               // formKey.currentState.save();
               // publicationProvider.editarPublicacion(_imagePrincipal);
-              RequestionProvider().transformarPrestamo(id);
+              String respuesta = await RequestionProvider().transformarPrestamo(id);
 
               Navigator.popAndPushNamed(context, 'requests');
+
+              if (respuesta == '200') {
+
+                utils.mostrarAlerta(context, 'Nuevo prestamo!', 'Aceptaste la solicitud de prestamo, ahora puedes encontrar tu nuevo prestamo activo en la sección "Prestamos"');
+
+              }else{
+
+                utils.mostrarAlerta(context, 'Ops! Algo salió mal', 'Hubo un problema al intentar aceptar la solicitud.');
+
+              }  
 
             },
           ),

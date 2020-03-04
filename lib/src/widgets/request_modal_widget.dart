@@ -2,6 +2,7 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:shareplace_flutter/src/providers/publication_provider.dart';
+import 'package:shareplace_flutter/src/utils/utils.dart' as utils;
 
 class LogoutOverlay extends StatefulWidget {
       @override
@@ -141,16 +142,26 @@ class LogoutOverlay extends StatefulWidget {
                                           fontWeight: FontWeight.bold,
                                           fontSize: 13.0),
                                     ),
-                                    onPressed: () {
-                                      setState(() {
+                                    onPressed: () async{
+                                      formKey.currentState.save();
 
-                                        formKey.currentState.save();
-
-                                        publicationProvider.solicitarPublicacion(motivo, desde, hasta);
+                                        String respuesta = await publicationProvider.solicitarPublicacion(motivo, desde, hasta);
                                         
                                         // Route route = MaterialPageRoute(
                                         //     builder: (context) => LoginScreen());
                                         Navigator.pop(context);
+                                        if (respuesta == '201') {
+
+                                          utils.mostrarAlerta(context, 'Solicitud', 'La solicitud se emitió correctamente.');
+
+                                        }else{
+
+                                          utils.mostrarAlerta(context, 'Ops! Algo salió mal', 'Hubo un problema al intentar emitir la solicitud.');
+
+                                        }  
+                                      setState(() {
+
+                                         
                                       });
                                     },
                                   )),

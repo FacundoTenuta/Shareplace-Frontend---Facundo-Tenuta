@@ -4,6 +4,7 @@ import 'package:intl/intl.dart';
 import 'package:shareplace_flutter/src/models/requestion_model.dart';
 import 'package:shareplace_flutter/src/preferencias_usuario/preferencias_usuario.dart';
 import 'package:shareplace_flutter/src/providers/requestion_provider.dart';
+import 'package:shareplace_flutter/src/utils/utils.dart' as utils;
 
 
 class ListaSolicitudesRecibidas extends StatefulWidget {
@@ -154,11 +155,20 @@ class _ListaSolicitudesRecibidasState extends State<ListaSolicitudesRecibidas> {
                       backgroundColor: Color.fromRGBO(206, 80, 80, 1),
                       child: Icon(Icons.clear, size: 20.0,),
                       onPressed: () async{
-                        await RequestionProvider().eliminarSolicitud(id);
+                        String respuesta = await RequestionProvider().eliminarSolicitud(id);
                         this.obtenerPagina1();
                         setState(() {
                           
                         });
+                        if (respuesta == '200') {
+
+                          utils.mostrarAlerta(context, 'Solicitud', 'La solicitud se elimino correctamente.');
+
+                        }else{
+
+                          utils.mostrarAlerta(context, 'Ops! Algo salió mal', 'Hubo un problema al eliminar la solicitud.');
+
+                        }
                       },
                     ),
                   ),

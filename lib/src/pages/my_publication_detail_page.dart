@@ -7,6 +7,7 @@ import 'package:provider/provider.dart';
 import 'package:shareplace_flutter/src/models/publication_model.dart' as model;
 import 'package:shareplace_flutter/src/providers/publication_provider.dart';
 import 'package:shareplace_flutter/src/widgets/menu_widget.dart';
+import 'package:shareplace_flutter/src/utils/utils.dart' as utils;
 
 class MyPublicationDetailPage extends StatefulWidget{
 
@@ -247,9 +248,19 @@ class _MyPublicationDetailPageState extends State<MyPublicationDetailPage> {
             shape: RoundedRectangleBorder(
               borderRadius: BorderRadius.circular(25),
             ),
-            onPressed: (){
-              provider.borrarPublicacion();
-              Navigator.popAndPushNamed(context, 'myPublications');
+            onPressed: ()async {
+              String respuesta = await provider.borrarPublicacion();
+              // Navigator.popAndPushNamed(context, 'myPublications');
+              Navigator.of(context).pushNamedAndRemoveUntil('myPublications', ModalRoute.withName('home'));
+              if (respuesta == '200') {
+
+                utils.mostrarAlerta(context, 'Tu publicación', 'Se eliminó el tu publicación correctamente.');
+
+              }else{
+
+                utils.mostrarAlerta(context, 'Ops! Algo salió mal', 'Hubo un problema al intentar eliminar tu publicación.');
+
+              }    
             },
           ),
         );
@@ -280,8 +291,17 @@ class _MyPublicationDetailPageState extends State<MyPublicationDetailPage> {
             shape: RoundedRectangleBorder(
               borderRadius: BorderRadius.circular(25),
             ),
-            onPressed: (){
-              provider.cambiarEstadoPublicacion();
+            onPressed: ()async {
+              String respuesta = await provider.cambiarEstadoPublicacion();
+              if (respuesta == '200') {
+
+                utils.mostrarAlerta(context, 'Tu publicación', 'Se cambió el estado de tu publicación correctamente.');
+
+              }else{
+
+                utils.mostrarAlerta(context, 'Ops! Algo salió mal', 'Hubo un problema al cambiar el estado de tu publicación');
+
+              }    
             },
           ),
         );

@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:shareplace_flutter/src/preferencias_usuario/preferencias_usuario.dart';
 import 'package:shareplace_flutter/src/providers/publication_provider.dart';
+import 'package:shareplace_flutter/src/utils/utils.dart' as utils;
 
 
 
@@ -434,9 +435,19 @@ class _NewPublicationPageState extends State<NewPublicationPage> {
         ),
         onPressed: () async {
           formKey.currentState.save();
-          await PublicationProvider().crearPublicacion(this._title, this._description, this._conditions, this._principalImage, this._extraImages, prefs.user);
+          String respuesta = await PublicationProvider().crearPublicacion(this._title, this._description, this._conditions, this._principalImage, this._extraImages, prefs.user);
 
-          Navigator.popAndPushNamed(context, 'myPublications');
+          Navigator.of(context).pushNamedAndRemoveUntil('myPublications', ModalRoute.withName('home'));
+
+          if (respuesta == '201') {
+
+            utils.mostrarAlerta(context, 'Nueva publicación', 'Tu nueva publicación se creó correctamente.');
+
+          }else{
+
+            utils.mostrarAlerta(context, 'Ops! Algo salió mal', 'Hubo un problema al crear la publicación.');
+
+          }          
 
         },
       ),

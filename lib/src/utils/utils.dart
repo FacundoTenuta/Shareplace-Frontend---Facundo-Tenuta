@@ -12,13 +12,13 @@ bool isNumeric(String s){
 
 }
 
-void mostrarAlerta(BuildContext context, String mensaje){
+void mostrarAlerta(BuildContext context, String titulo, String mensaje){
 
   showDialog(
     context: context,
     builder: (context){
       return AlertDialog(
-        title: Text('Información incorrecta'),
+        title: Text(titulo),
         content: Text(mensaje),
         actions: <Widget>[
           FlatButton(

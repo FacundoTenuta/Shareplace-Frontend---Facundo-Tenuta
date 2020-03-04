@@ -160,7 +160,7 @@ class LoginPage extends StatelessWidget {
 
     }else{
 
-      utils.mostrarAlerta(context, info['mensaje']);
+      utils.mostrarAlerta(context, 'Inicio de Sesión', 'Usuario o contraseña incorrectos');
 
     }
 
