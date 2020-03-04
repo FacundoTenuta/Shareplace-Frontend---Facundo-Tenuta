@@ -1,6 +1,6 @@
 
 import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
+import 'package:shareplace_flutter/src/models/argumentos_other_profile_model.dart';
 import 'package:shareplace_flutter/src/models/publication_model.dart';
 import 'package:shareplace_flutter/src/models/requestion_model.dart';
 import 'package:shareplace_flutter/src/models/user_model.dart';
@@ -8,6 +8,7 @@ import 'package:shareplace_flutter/src/preferencias_usuario/preferencias_usuario
 import 'package:shareplace_flutter/src/providers/publication_provider.dart';
 import 'package:shareplace_flutter/src/providers/requestion_provider.dart';
 import 'package:shareplace_flutter/src/providers/user_provider.dart';
+import 'package:shareplace_flutter/src/utils/utils.dart' as utils;
 
 class LoanDetailPage extends StatelessWidget {
   const LoanDetailPage({Key key}) : super(key: key);
@@ -17,12 +18,20 @@ class LoanDetailPage extends StatelessWidget {
 
     Requestion prestamo = ModalRoute.of(context).settings.arguments;
 
+    Widget titulo;
+
+    if (!prestamo.active) {
+      titulo = Text('Prestamo finalizado');
+    }else{
+      titulo = Text('Prestamo');
+    }
+
     return Scaffold(
       backgroundColor: Color.fromRGBO(229, 241, 246, 1),
       appBar: AppBar(
         elevation: 12.0,
         backgroundColor: Color.fromRGBO(125, 201, 231, 1),
-        title: Text('Prestamo'),
+        title: titulo,
         centerTitle: true,
         leading: FloatingActionButton(
           
@@ -47,28 +56,31 @@ class LoanDetailPage extends StatelessWidget {
 
     Future<Publication> publi = PublicationProvider().obtenerPublicacion(prestamo.publicationId);
 
-    return Column(
-      children: <Widget>[
-        Container(
-          margin: EdgeInsets.only(top: 20, bottom: 20),
-          child: Text('Prestamo de: ' + prestamo.title)
-        ),
-        Row(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: <Widget>[
-            Container(
-              margin: EdgeInsets.only(right: 20),
-              child: _publicationImage(prestamo, publi)
-            ),
-            _usuarios(prestamo, publi)
-          ],
-        ),
-        Container(
-          margin: EdgeInsets.only(top: 20, bottom: 20),
-          child: _fechas(prestamo)
-        ),
-        _botones(prestamo, publi),
-      ],
+    return SingleChildScrollView(
+      child: Column(
+        children: <Widget>[
+          Container(
+            margin: EdgeInsets.only(top: 30, bottom: 30),
+            child: Text('Prestamo de: ' + prestamo.title, style: TextStyle(fontSize: 23, fontStyle: FontStyle.italic, fontWeight: FontWeight.bold, color: Color.fromRGBO(149, 152, 154, 0.85)))
+          ),
+          Row(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: <Widget>[
+              Container(
+                margin: EdgeInsets.only(right: 20),
+                child: _publicationImage(prestamo, publi)
+              ),
+              _usuarios(prestamo, publi)
+            ],
+          ),
+          Container(
+            margin: EdgeInsets.only(top: 30, bottom: 30),
+            child: _fechas(prestamo)
+          ),
+          _botones(prestamo, publi),
+          SizedBox(height: 20),
+        ],
+      ),
     );
 
   }
@@ -97,7 +109,7 @@ class LoanDetailPage extends StatelessWidget {
                 if (snapshot.hasData) {
                   return Column(
                     children: <Widget>[
-                      Text('Prestador'),
+                      Text('Prestador', style: TextStyle(fontSize: 20, fontStyle: FontStyle.italic, fontWeight: FontWeight.bold, color: Color.fromRGBO(149, 152, 154, 0.85))),
                       RaisedButton(
                         child: Container(              
                           child: Row(
@@ -147,7 +159,7 @@ class LoanDetailPage extends StatelessWidget {
                 if (snapshot.hasData) {
                   return Column(
                     children: <Widget>[
-                      Text('Prestatario'),
+                      Text('Prestatario', style: TextStyle(fontSize: 20, fontStyle: FontStyle.italic, fontWeight: FontWeight.bold, color: Color.fromRGBO(149, 152, 154, 0.85))),
                       RaisedButton(
                         child: Container(              
                           child: Row(
@@ -250,6 +262,7 @@ class LoanDetailPage extends StatelessWidget {
         if (snapshot.hasData) {
           if (prestamo.active) {
             botonFinalizar =  ButtonTheme(
+              buttonColor: Color.fromRGBO(26, 176, 181, 1),
               minWidth: 130.0,
               height: 50.0,
               child: RaisedButton(
@@ -260,9 +273,18 @@ class LoanDetailPage extends StatelessWidget {
                 shape: RoundedRectangleBorder(
                   borderRadius: BorderRadius.circular(25),
                 ),
-                onPressed: (){
-                  RequestionProvider().finalizarPrestamo(prestamo.id);
-                  Navigator.popAndPushNamed(context, 'loans');
+                onPressed: () async{
+                  String respuesta = await RequestionProvider().finalizarPrestamo(prestamo.id);
+                  Navigator.of(context).pushNamedAndRemoveUntil('loans', ModalRoute.withName('home'));
+                  if (respuesta == '200') {
+
+                    utils.mostrarAlerta(context, 'Tu prestamo', 'Se finalizó tu prestamo correctamente.');
+
+                  }else{
+
+                    utils.mostrarAlerta(context, 'Ops! Algo salió mal', 'Hubo un problema al intentar finalizar tu prestamo.');
+
+                  }   
                 },
               ),
             );
@@ -273,6 +295,7 @@ class LoanDetailPage extends StatelessWidget {
           return Column(
             children: <Widget>[
               ButtonTheme(
+                buttonColor: Color.fromRGBO(10, 116, 209, 1),
                 minWidth: 130.0,
                 height: 50.0,
                 child: RaisedButton(
@@ -284,7 +307,8 @@ class LoanDetailPage extends StatelessWidget {
                     borderRadius: BorderRadius.circular(25),
                   ),
                   onPressed: (){
-                    // provider.cambiarEstadoPublicacion();
+                    ArgumentosOtherProfile arg = ArgumentosOtherProfile(snapshot.data, true);
+                    Navigator.pushNamed(context, 'publicationDetail', arguments: arg);
                   },
                 ),
               ),
@@ -315,9 +339,15 @@ class LoanDetailPage extends StatelessWidget {
 
     return Column(
       children: <Widget>[
-        Text('Fecha de inicio'),
-        Text(prestamo.startDate.day.toString() + '/' + prestamo.startDate.month.toString() + '/' + prestamo.startDate.year.toString()),
-        _fechaFinalizacion(prestamo),
+        Text('Fecha de inicio', style: TextStyle(fontSize: 20, fontStyle: FontStyle.italic, fontWeight: FontWeight.bold, color: Color.fromRGBO(149, 152, 154, 0.85))),
+        Container(
+          margin: EdgeInsets.only(top: 10),
+          child: Text(prestamo.startDate.day.toString() + '/' + prestamo.startDate.month.toString() + '/' + prestamo.startDate.year.toString(), style: TextStyle(fontSize: 18),)
+        ),
+        Container(
+          margin: EdgeInsets.only(top: 15),
+          child: _fechaFinalizacion(prestamo)
+        ),
       ],
     );
 
@@ -328,12 +358,20 @@ class LoanDetailPage extends StatelessWidget {
     if (!prestamo.active) {
       return Column(
         children: <Widget>[
-          Text('Fecha de finalización'),
-          Text(prestamo.endDate.day.toString() + '/' + prestamo.endDate.month.toString() + '/' + prestamo.endDate.year.toString()),
+          Text('Fecha de finalización', style: TextStyle(fontSize: 20, fontStyle: FontStyle.italic, fontWeight: FontWeight.bold, color: Color.fromRGBO(149, 152, 154, 0.85))),
+          Text(prestamo.endDate.day.toString() + '/' + prestamo.endDate.month.toString() + '/' + prestamo.endDate.year.toString(), style: TextStyle(fontSize: 18),),
         ],
       );
     }else{
-      return Container();
+      return Column(
+        children: <Widget>[
+          Text('Fecha de finalización estimada', style: TextStyle(fontSize: 20, fontStyle: FontStyle.italic, fontWeight: FontWeight.bold, color: Color.fromRGBO(149, 152, 154, 0.85))),
+          Container(
+            margin: EdgeInsets.only(top: 10),
+            child: Text(prestamo.untilDate.day.toString() + '/' + prestamo.untilDate.month.toString() + '/' + prestamo.untilDate.year.toString(), style: TextStyle(fontSize: 18),)
+          ),
+        ],
+      );
     }
 
   }
