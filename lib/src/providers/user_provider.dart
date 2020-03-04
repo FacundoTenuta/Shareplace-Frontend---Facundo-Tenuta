@@ -86,7 +86,7 @@ class UserProvider with ChangeNotifier {
 
   Future<User> _procesarRespuesta(Uri url) async {
 
-    final resp = await http.get(url);
+    final resp = await http.get(url, headers: {HttpHeaders.authorizationHeader: 'bearer ' + _prefs.token.toString()});
     final decodedData = json.decode(resp.body);
 
     // print(decodedData);
@@ -129,6 +129,7 @@ class UserProvider with ChangeNotifier {
       options: Options(
         headers: {
           "Content-Type": "application/json",
+          "authorization" : "bearer " + _prefs.token.toString(),
         }
       ),
       data: formData

@@ -1,16 +1,20 @@
 
 import 'dart:convert';
+import 'dart:io';
 import 'package:http/http.dart' as http;
 import 'dart:core';
 import 'dart:async';
 
 import 'package:shareplace_flutter/src/models/requestion_model.dart';
+import 'package:shareplace_flutter/src/preferencias_usuario/preferencias_usuario.dart';
 
 
 class RequestionProvider{
 
   int _lastPage;
   bool _cargando = false;
+
+  final _prefs = new PreferenciasUsuario();
 
   List<Requestion> _requestions = new List();
 
@@ -130,7 +134,7 @@ class RequestionProvider{
 
   Future<List<Requestion>> _procesarRespuesta(Uri url) async {
 
-    final resp = await http.get(url);
+    final resp = await http.get(url, headers: {HttpHeaders.authorizationHeader: 'bearer ' + _prefs.token.toString()});
     final decodedData = json.decode(resp.body);
 
 
@@ -142,7 +146,7 @@ class RequestionProvider{
 
   }
 
-  Future eliminarSolicitud(int id) async {
+  Future<String> eliminarSolicitud(int id) async {
 
     if (_cargando){
       return null;
@@ -152,13 +156,15 @@ class RequestionProvider{
 
     final url = Uri.http('10.0.2.2', '/shareplace-backend---facundo-tenuta/public/api/requestions/$id');
 
-    await http.delete(url);
+    final info = await http.delete(url, headers: {HttpHeaders.authorizationHeader: 'bearer ' + _prefs.token.toString()});
         
     _cargando = false;
 
+    return info.statusCode.toString();
+
   }
 
-  Future transformarPrestamo(int id) async {
+  Future<String> transformarPrestamo(int id) async {
 
     if (_cargando){
       return null;
@@ -166,21 +172,21 @@ class RequestionProvider{
 
     _cargando = true;
 
-    print(DateTime.now().toString());
-
     final url = Uri.http('10.0.2.2', '/shareplace-backend---facundo-tenuta/public/api/loans/$id', {
       'isLoan'          : '1',
       'startDate'       : DateTime.now().toString(),
       'active'          : '1',
     });
 
-    await http.put(url);
+    final info = await http.put(url, headers: {HttpHeaders.authorizationHeader: 'bearer ' + _prefs.token.toString()});
         
     _cargando = false;
 
+    return info.statusCode.toString();
+
   }
 
-  Future finalizarPrestamo(int id) async {
+  Future<String> finalizarPrestamo(int id) async {
 
     if (_cargando){
       return null;
@@ -194,9 +200,11 @@ class RequestionProvider{
       'isLoan'          : '1',
     });
 
-    await http.put(url);
+    final info = await http.put(url, headers: {HttpHeaders.authorizationHeader: 'bearer ' + _prefs.token.toString()});
         
     _cargando = false;
+
+    return info.statusCode.toString();
 
   }
 

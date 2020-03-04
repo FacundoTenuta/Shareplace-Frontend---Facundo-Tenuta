@@ -174,7 +174,7 @@ class PublicationProvider with ChangeNotifier {
 
   Future<List<model.Publication>> _procesarRespuesta(Uri url) async {
 
-    final resp = await http.get(url);
+    final resp = await http.get(url, headers: {HttpHeaders.authorizationHeader: 'bearer ' + _prefs.token.toString()});
     final decodedData = json.decode(resp.body);
 
     // print(decodedData);
@@ -258,6 +258,7 @@ class PublicationProvider with ChangeNotifier {
       options: Options(
         headers: {
           "Content-Type": "application/json",
+          "authorization" : "bearer " + _prefs.token.toString(),
         }
       ),
       data: formData
@@ -282,7 +283,7 @@ class PublicationProvider with ChangeNotifier {
 
   }
 
-  void borrarPublicacion() async{
+  Future<String> borrarPublicacion() async{
 
     
     if (_cargando){
@@ -293,13 +294,15 @@ class PublicationProvider with ChangeNotifier {
 
     final url = Uri.http('10.0.2.2', '/shareplace-backend---facundo-tenuta/public/api/publications/${this._publicationReal.id}');
 
-    await http.delete(url);
+    final info = await http.delete(url, headers: {HttpHeaders.authorizationHeader: 'bearer ' + _prefs.token.toString()});
         
     _cargando = false;
 
+    return info.statusCode.toString();
+
   }
 
-  void crearPublicacion(String title, String description, List<String> conditions, File principalImage, List<File> extraImages, user) async{
+  Future<String> crearPublicacion(String title, String description, List<String> conditions, File principalImage, List<File> extraImages, user) async{
 
     FormData formData = new FormData(); 
 
@@ -329,11 +332,12 @@ class PublicationProvider with ChangeNotifier {
 
     formData.fields.add(MapEntry("user_id", user.toString()),);
 
-    await new Dio().post(
+    Response info = await new Dio().post(
       'http://10.0.2.2/shareplace-backend---facundo-tenuta/public/api/publications',
       options: Options(
         headers: {
           "Content-Type": "application/json",
+          "authorization" : "bearer " + _prefs.token.toString(),
         }
       ),
       data: formData
@@ -341,9 +345,11 @@ class PublicationProvider with ChangeNotifier {
 
     _cargando = false;
 
+    return info.statusCode.toString();
+
   }
 
-  void cambiarEstadoPublicacion() async {
+  Future<String> cambiarEstadoPublicacion() async {
 
     if (_cargando){
       return null;
@@ -365,11 +371,13 @@ class PublicationProvider with ChangeNotifier {
       '_method'   : 'put',
     });
 
-    await http.post(url);
+    final info = await http.post(url, headers: {HttpHeaders.authorizationHeader: 'bearer ' + _prefs.token.toString()});
 
     this.setEstado(!estado);
         
     _cargando = false;
+
+    return info.statusCode.toString();
 
   }
 
@@ -378,7 +386,7 @@ class PublicationProvider with ChangeNotifier {
     notifyListeners();
   }
 
-  void solicitarPublicacion(String motivo, DateTime desde, DateTime hasta) async{
+  Future<String> solicitarPublicacion(String motivo, DateTime desde, DateTime hasta) async{
 
     if (_cargando){
       return null;
@@ -399,9 +407,11 @@ class PublicationProvider with ChangeNotifier {
       'untilDate'   : hasta.toString(),
     });
 
-    await http.post(url);
+    final info = await http.post(url, headers: {HttpHeaders.authorizationHeader: 'bearer ' + _prefs.token.toString()});
 
     _cargando = false;
+
+    return info.statusCode.toString();
 
   }
 
@@ -415,7 +425,7 @@ class PublicationProvider with ChangeNotifier {
 
     final url = Uri.http('10.0.2.2', '/shareplace-backend---facundo-tenuta/public/api/publications/$id');
 
-    final resp = await http.get(url);
+    final resp = await http.get(url, headers: {HttpHeaders.authorizationHeader: 'bearer ' + _prefs.token.toString()});
     final decodedData = json.decode(resp.body);
 
     // print(decodedData);
