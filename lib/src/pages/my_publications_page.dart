@@ -123,9 +123,6 @@ class _MyPublicationsState extends State<MyPublicationsPage> {
       _publications.clear();
       _page = 1;
       _cargarMisPublicaciones();
-      // if (_publications.isEmpty) {
-        
-      // }
 
   }
 

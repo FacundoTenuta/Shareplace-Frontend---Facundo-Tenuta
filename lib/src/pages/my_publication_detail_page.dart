@@ -254,7 +254,7 @@ class _MyPublicationDetailPageState extends State<MyPublicationDetailPage> {
               Navigator.of(context).pushNamedAndRemoveUntil('myPublications', ModalRoute.withName('home'));
               if (respuesta == '200') {
 
-                utils.mostrarAlerta(context, 'Tu publicación', 'Se eliminó el tu publicación correctamente.');
+                utils.mostrarAlerta(context, 'Tu publicación', 'Se eliminó tu publicación correctamente.');
 
               }else{
 

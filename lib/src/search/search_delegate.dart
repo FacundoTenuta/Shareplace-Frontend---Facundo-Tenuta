@@ -11,21 +11,6 @@ class DataSearch extends SearchDelegate{
   String seleccion = '';
   final busquedasProvider = new BusquedasProvider();
 
-  // final peliculas = [
-  //   'Spiderman',
-  //   'Aquaman',
-  //   'Batman',
-  //   'Shazam',
-  //   'Ironman',
-  //   'Capitan America',
-  // ];
-
-  // final peliculasRecientes = [
-  //   'Spiderman',
-  //   'Capitan America'
-  // ];
-
-
 
   @override
   List<Widget> buildActions(BuildContext context) {
