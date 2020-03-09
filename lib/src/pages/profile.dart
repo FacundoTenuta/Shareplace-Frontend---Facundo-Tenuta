@@ -7,6 +7,7 @@ import 'package:provider/provider.dart';
 import 'package:shareplace_flutter/src/models/user_model.dart';
 import 'package:shareplace_flutter/src/preferencias_usuario/preferencias_usuario.dart';
 import 'package:shareplace_flutter/src/providers/user_provider.dart';
+import 'package:shareplace_flutter/src/utils/utils.dart' as utils;
 
 
 
@@ -138,9 +139,19 @@ final prefs = PreferenciasUsuario();
           shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.circular(25),
           ),
-          onPressed: (){
+          onPressed: ()async{
             formKey.currentState.save();
-            userProvider.editarUsuario(_name, _lastName, _mail, _phone, _description, _imageNueva);
+            String respuesta = await userProvider.editarUsuario(_name, _lastName, _mail, _phone, _description, _imageNueva);
+            Navigator.pop(context);
+            if (respuesta == '200') {
+
+              utils.mostrarAlerta(context, 'Tu perfil', 'Se modificó tu perfil correctamente.');
+
+            }else{
+
+              utils.mostrarAlerta(context, 'Ops! Algo salió mal', 'Hubo un problema al intentar modificar tu perfil.');
+
+            }
           },
         ),
       )
@@ -326,9 +337,9 @@ final prefs = PreferenciasUsuario();
     TextEditingController asd;
 
     if (snapshot.data.description == 'null') {
-      asd = TextEditingController(text: snapshot.data.description);
-    }else{
       asd = TextEditingController(text: '');
+    }else{
+      asd = TextEditingController(text: snapshot.data.description);
     }
 
     return Container(

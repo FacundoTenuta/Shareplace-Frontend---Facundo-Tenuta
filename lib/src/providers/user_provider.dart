@@ -96,7 +96,7 @@ class UserProvider with ChangeNotifier {
 
   }
 
-  editarUsuario(String _name, String _lastName, String _mail, String _phone, String _description, File _image) async {
+  Future<String> editarUsuario(String _name, String _lastName, String _mail, String _phone, String _description, File _image) async {
 
     // Dio dio = new Dio(
     // //   // BaseOptions(
@@ -148,6 +148,8 @@ class UserProvider with ChangeNotifier {
     setUser(user);
         
     _cargando = false;
+
+    return response.statusCode.toString();
 
   }
 
