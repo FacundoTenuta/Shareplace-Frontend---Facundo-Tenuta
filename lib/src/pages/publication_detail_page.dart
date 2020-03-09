@@ -7,6 +7,7 @@ import 'package:provider/provider.dart';
 import 'package:shareplace_flutter/src/models/argumentos_other_profile_model.dart';
 import 'package:shareplace_flutter/src/models/publication_model.dart' as model;
 import 'package:shareplace_flutter/src/models/user_model.dart';
+import 'package:shareplace_flutter/src/preferencias_usuario/preferencias_usuario.dart';
 import 'package:shareplace_flutter/src/providers/publication_provider.dart';
 import 'package:shareplace_flutter/src/providers/user_provider.dart';
 import 'package:shareplace_flutter/src/widgets/menu_widget.dart';
@@ -19,6 +20,8 @@ class PublicationDetailPage extends StatefulWidget{
 }
 
 class _PublicationDetailPageState extends State<PublicationDetailPage> {
+
+  final prefs = PreferenciasUsuario();
 
   int _current = 0;
 
@@ -88,10 +91,27 @@ class _PublicationDetailPageState extends State<PublicationDetailPage> {
           ),
           _usuario(publi),
           SizedBox(height: 20.0),
+          _botones(publicationProvider, publi, context),
+          
+          SizedBox(height: 20.0),
+        ],
+      ),
+    );
+    
+
+
+
+  }
+
+  Widget _botones(PublicationProvider publicationProvider, model.Publication publi, BuildContext context) {
+    if (prefs.user != publi.userId) {
+      return Column(
+        children: <Widget>[
           ButtonTheme(
             minWidth: 130.0,
             height: 50.0,
             child: RaisedButton(
+              
               padding: EdgeInsets.only(right: 20, left: 20),
               textColor: Colors.white,
               color: Color.fromRGBO(26, 176, 181, 1),
@@ -102,11 +122,11 @@ class _PublicationDetailPageState extends State<PublicationDetailPage> {
                 borderRadius: BorderRadius.circular(25),
               ),
               onPressed: (){
-                publicationProvider.setPublication(publi);
-                showDialog(
-                  context: context,
-                  builder: (_) => LogoutOverlay(),
-                );
+                  publicationProvider.setPublication(publi);
+                  showDialog(
+                    context: context,
+                    builder: (_) => LogoutOverlay(),
+                  );
               },
             ),
           ),
@@ -127,14 +147,11 @@ class _PublicationDetailPageState extends State<PublicationDetailPage> {
               onPressed: (){},
             ),
           ),
-          SizedBox(height: 20.0),
         ],
-      ),
-    );
-    
-
-
-
+      );
+    }else{
+      return Container();
+    }
   }
 
   Widget _usuario(model.Publication publi) {
