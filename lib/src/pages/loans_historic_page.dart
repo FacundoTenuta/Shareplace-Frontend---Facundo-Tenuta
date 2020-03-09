@@ -1,7 +1,10 @@
 
+import 'package:animate_do/animate_do.dart';
 import 'package:flutter/material.dart';
+import 'package:shareplace_flutter/src/models/publication_model.dart';
 import 'package:shareplace_flutter/src/models/requestion_model.dart';
 import 'package:shareplace_flutter/src/preferencias_usuario/preferencias_usuario.dart';
+import 'package:shareplace_flutter/src/providers/publication_provider.dart';
 import 'package:shareplace_flutter/src/providers/requestion_provider.dart';
 import 'package:shareplace_flutter/src/search/search_delegate.dart';
 import 'package:shareplace_flutter/src/widgets/menu_widget.dart';
@@ -93,7 +96,10 @@ class _LoansHistoricPageState extends State<LoansHistoricPage> {
         controller: _scrollController,
         itemCount: _loans.length,
         itemBuilder: (BuildContext context, int index){
-          return _loan(context, _loans[index]);
+          return FadeIn(
+            child: _loan(context, _loans[index]),
+            duration: Duration(seconds: 1),
+          );
         },
       ),
     );
@@ -203,22 +209,21 @@ class _LoansHistoricPageState extends State<LoansHistoricPage> {
           borderRadius: BorderRadius.circular(15.0),
           child: Row(
             children: <Widget>[
-              FadeInImage(
-                  // image: NetworkImage(publi.principalImage),
-                  image: AssetImage('assets/camara.jpg'),
-                  placeholder: AssetImage('assets/24.gif'),
-                  fadeInDuration: Duration(milliseconds: 150),
-                  height: 100.0,
-                  width: 160.0,
-                  fit: BoxFit.cover,
-              ),
-              Column(
-                
-                // crossAxisAlignment: CrossAxisAlignment.center,
+              _loanImage(loan.publicationId),
+              Stack(
+                alignment: AlignmentDirectional.topCenter,
                 children: <Widget>[
-                  Text(loan.title.toString()),
+                  _flechas(loan.requesterId),
                   
-                  Text(loan.id.toString())
+                  Column(
+                    children: <Widget>[
+                      Container(
+                        padding: EdgeInsets.only(top: 10),
+                        child: Text(loan.title.toString())
+                      ),
+                      
+                    ],
+                  ),
                 ],
               ),
             ],
@@ -229,6 +234,57 @@ class _LoansHistoricPageState extends State<LoansHistoricPage> {
         Navigator.pushNamed(context, 'loanDetail', arguments: loan);
       },
     );
+  }
+
+  Widget _loanImage(int publicationId) {
+
+    Future<Publication> publi = PublicationProvider().obtenerPublicacion(publicationId);
+
+    return FutureBuilder(
+      future: publi,
+      builder: (BuildContext context, AsyncSnapshot<Publication> snapshot) {
+        if (snapshot.hasData) {
+          return FadeInImage(
+            image: NetworkImage('http://10.0.2.2/shareplace-backend---facundo-tenuta/public/img/${snapshot.data.principalImage}'),
+            placeholder: AssetImage('assets/24.gif'),
+            fadeInDuration: Duration(milliseconds: 150),
+            height: 100.0,
+            width: 160.0,
+            fit: BoxFit.cover,
+          );
+        }else{
+          return Container(
+            height: 100.0,
+            width: 160.0,
+            child: Center(
+              child: CircularProgressIndicator()
+            )
+          );
+        }
+        
+      },
+    );
+
+    
+  }
+
+  Widget _flechas(int requesterId) {
+
+    if (requesterId == prefs.user) {
+      return Row(
+        children: <Widget>[
+          Icon(Icons.arrow_back_ios, size: 90, color: Color.fromRGBO(0, 200, 0, 0.09)),
+          Icon(Icons.arrow_back_ios, size: 90, color: Color.fromRGBO(0, 200, 0, 0.09)),
+        ],
+      );
+    }else{
+      return Row(
+        children: <Widget>[
+          Icon(Icons.arrow_forward_ios, size: 90, color: Color.fromRGBO(200, 0, 0, 0.09)),
+          Icon(Icons.arrow_forward_ios, size: 90, color: Color.fromRGBO(200, 0, 0, 0.09)),
+        ],
+      );
+    }
   }
 
   Widget _listaVacia(){
