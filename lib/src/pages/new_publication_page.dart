@@ -295,24 +295,42 @@ class _NewPublicationPageState extends State<NewPublicationPage> {
                   width: 40.0,
                   height: 40.0,
                   child: FloatingActionButton(
-                      heroTag: null,
-                      backgroundColor: _principalImage == null ? color1 : color2 ,
-                      child: Icon(Icons.cloud_upload, size: 25.0,),
-                      onPressed: () async {
-                        if (_principalImage == null) {
-                          _principalImage = await ImagePicker.pickImage(source: ImageSource.gallery);
+                    heroTag: null,
+                    backgroundColor: _principalImage == null ? color1 : color2 ,
+                    child: Icon(Icons.cloud_upload, size: 25.0,),
+                    onPressed: () async {
+                      if (_principalImage == null) {
+                        _principalImage = await ImagePicker.pickImage(source: ImageSource.gallery);
 
-                          setState(() {
-                            
-                          });
-                          // if (await _principalImage.exists()) {
-                          //   provider.setPrincipalImage(_imagePrincipal.path);
-                          // }
-                        }
-                      },
-                    ),
+                        setState(() {
+                          
+                        });
+                      }
+                    },
                   ),
                 ),
+              ),
+              Container(
+                margin: EdgeInsets.only(top:10, left: 10),
+                child: SizedBox(
+                  width: 40.0,
+                  height: 40.0,
+                  child: FloatingActionButton(
+                    heroTag: null,
+                    backgroundColor: _principalImage == null ? color1 : color2 ,
+                    child: Icon(Icons.camera_alt, size: 25.0,),
+                    onPressed: () async {
+                      if (_principalImage == null) {
+                        _principalImage = await ImagePicker.pickImage(source: ImageSource.camera);
+
+                        setState(() {
+                          
+                        });
+                      }
+                    },
+                  ),
+                ),
+              ),
             ],
           ),
         ),
@@ -343,13 +361,33 @@ class _NewPublicationPageState extends State<NewPublicationPage> {
                       extra = await ImagePicker.pickImage(source: ImageSource.gallery);
                       if (await extra.exists()) {
                         _extraImages.add(extra);
-                        // List<File> aux = provider.getNewImages;
-                        // aux.add(_imageExtra);
-                        // provider.setNewImages(aux);
                       }
                       setState(() {
                           
                       });
+                    },
+                  ),
+                ),
+              ),
+              Container(
+                margin: EdgeInsets.only(top:10, left: 10),
+                child: SizedBox(
+                  width: 40.0,
+                  height: 40.0,
+                  child: FloatingActionButton(
+                    heroTag: null,
+                    backgroundColor: Color.fromRGBO(0, 150, 136, 1),
+                    child: Icon(Icons.camera_alt, size: 25.0,),
+                    onPressed: () async {
+                      if (_principalImage == null) {
+                        extra = await ImagePicker.pickImage(source: ImageSource.camera);
+                        if (await extra.exists()) {
+                          _extraImages.add(extra);
+                        }
+                        setState(() {
+                          
+                        });
+                      }
                     },
                   ),
                 ),
@@ -386,8 +424,8 @@ class _NewPublicationPageState extends State<NewPublicationPage> {
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: <Widget>[
                     Container(
-                      width: 250,
-                      child: Text(_extraImages[index].path),
+                      width: 130,
+                      child: Image(image: FileImage(_extraImages[index]))
                     ),
                     Container(
                       margin: EdgeInsets.only(left: 15),
@@ -465,8 +503,8 @@ class _NewPublicationPageState extends State<NewPublicationPage> {
           mainAxisAlignment: MainAxisAlignment.center,
           children: <Widget>[
             Container(
-              width: 250,
-              child: Text(_principalImage.path)
+              width: 150,
+              child: Image(image: FileImage(_principalImage))
             ),
             Container(
               margin: EdgeInsets.only(left: 15),

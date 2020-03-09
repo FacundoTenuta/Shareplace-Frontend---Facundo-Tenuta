@@ -50,6 +50,7 @@ class PublicationProvider with ChangeNotifier {
   int _id;
 
   List<model.Image> _images;
+  List<model.Image> _currentImages;
   List<String> _conditions;
   List<int> _deletedImages;
 
@@ -92,6 +93,15 @@ class PublicationProvider with ChangeNotifier {
 
   void setImages( images ){
     this._images = images;
+    notifyListeners();
+  }
+
+  List<model.Image> get getCurrentImages {
+    return this._currentImages;
+  }
+
+  void setCurrentImages( images ){
+    this._currentImages = images;
     notifyListeners();
   }
 
@@ -206,11 +216,13 @@ class PublicationProvider with ChangeNotifier {
     }
     this._principalImage = principalImage;
 
+    this.setCurrentImages(List<model.Image>());
+    this.getCurrentImages.addAll(images);
     this._images = images;
     this._description = description;
     this._conditions = aux2;
 
-    notifyListeners();
+    // notifyListeners();
 
   }
 
@@ -251,6 +263,11 @@ class PublicationProvider with ChangeNotifier {
     }
 
     formData.fields.add(MapEntry("description", _description),);
+
+    if (this.getprincipalImage == null) {
+      formData.fields.add(MapEntry("notPrincipalImage", "1"));
+    }
+
     formData.fields.add(MapEntry("_method", "put"),);
 
     var response = await new Dio().post(
@@ -276,10 +293,19 @@ class PublicationProvider with ChangeNotifier {
 
   void removeImage(String aux) {
 
-    model.Image aux2 = this._images.firstWhere((image) => image.path == aux);
+    model.Image aux2 = this.getCurrentImages.firstWhere((image) => image.path == aux, orElse: () => null);
 
-    this._images.remove(aux2);
-    this._deletedImages.add(aux2.id);
+    if (aux2 != null) {
+      // this._currentImages.remove(aux2);
+      List<model.Image> aux = this.getCurrentImages;
+      int index = aux.indexOf(aux2);
+      aux.removeAt(index);
+      this.setCurrentImages(aux);
+    
+      this._deletedImages.add(aux2.id);
+    }
+
+    
 
   }
 

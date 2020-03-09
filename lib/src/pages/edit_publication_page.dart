@@ -27,7 +27,6 @@ class EditPublicationPage extends StatelessWidget {
 
   File _imagePrincipal, _imageExtra;
 
-
   @override
   Widget build(BuildContext context) {
 
@@ -314,9 +313,38 @@ class EditPublicationPage extends StatelessWidget {
                       onPressed: () async {
                         if (provider.getprincipalImage == null) {
                           _imagePrincipal = await ImagePicker.pickImage(source: ImageSource.gallery);
-                          if (await _imagePrincipal.exists()) {
-                            provider.setPrincipalImage(_imagePrincipal.path);
+                          if (_imagePrincipal != null) {
+                            if (await _imagePrincipal.exists()) {
+                              provider.setPrincipalImage(_imagePrincipal.path);
+                            }
                           }
+                          
+                        }
+                      },
+                    ),
+                  ),
+                ),
+              ),
+              Container(
+                margin: EdgeInsets.only(top:10, left: 10),
+                child: SizedBox(
+                  width: 40.0,
+                  height: 40.0,
+                  child: Consumer<PublicationProvider>(
+                    builder:(_, provider, __) => FloatingActionButton(
+                      
+                      heroTag: null,
+                      backgroundColor: provider.getprincipalImage == null ? color1 : color2 ,
+                      child: Icon(Icons.camera_alt, size: 25.0,),
+                      onPressed: () async {
+                        if (provider.getprincipalImage == null) {
+                          _imagePrincipal = await ImagePicker.pickImage(source: ImageSource.camera);
+                          if (_imagePrincipal != null) {
+                            if (await _imagePrincipal.exists()) {
+                              provider.setPrincipalImage(_imagePrincipal.path);
+                            }
+                          }
+                          
                         }
                       },
                     ),
@@ -330,14 +358,26 @@ class EditPublicationPage extends StatelessWidget {
         Consumer<PublicationProvider>(
           builder:(_, provider, __) {
             if (provider.getprincipalImage != null) {
+
+              Widget image;
+
+              if (provider.getprincipalImage.contains('storage')) {
+                image = Image(image: FileImage(_imagePrincipal));
+              }else{
+                image = FadeInImage(
+                    placeholder: AssetImage('assets/24.gif'), 
+                    image: NetworkImage('http://10.0.2.2/shareplace-backend---facundo-tenuta/public/img/' + provider.getprincipalImage),
+                  );
+              }
+
               return Container(
                 margin: EdgeInsets.only(top: 10, bottom: 15),
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: <Widget>[
                     Container(
-                      width: 250,
-                      child: Text(provider.getprincipalImage)
+                      width: 150,
+                      child: image
                     ),
                     Container(
                       margin: EdgeInsets.only(left: 15),
@@ -397,13 +437,36 @@ class EditPublicationPage extends StatelessWidget {
                   ),
                 ),
               ),
+              Container(
+                margin: EdgeInsets.only(top:10, left: 10),
+                padding: EdgeInsets.only(),
+                child: SizedBox(
+                  width: 40.0,
+                  height: 40.0,
+                  child: Consumer<PublicationProvider>(
+                    builder: (_, provider, __) => FloatingActionButton(
+                      heroTag: null,
+                      backgroundColor: Color.fromRGBO(0, 150, 136, 1),
+                      child: Icon(Icons.camera_alt, size: 25.0,),
+                      onPressed: () async{
+                          _imageExtra = await ImagePicker.pickImage(source: ImageSource.camera);
+                          if (await _imageExtra.exists()) {
+                            List<File> aux = provider.getNewImages;
+                            aux.add(_imageExtra);
+                            provider.setNewImages(aux);
+                          }
+                      },
+                    ),
+                  ),
+                ),
+              ),
             ],
           ),
         ),
 
         Container(
           margin: EdgeInsets.only(top: 10, bottom: 15),
-          child: _listaImagenes(),
+          child: _listaImagenes(publicationProvider),
         ),
         
       ],
@@ -411,23 +474,34 @@ class EditPublicationPage extends StatelessWidget {
 
   }
 
-  Widget _listaImagenes() {
-
+  Widget _listaImagenes(PublicationProvider publicationProvider) {
 
     return Consumer<PublicationProvider>(
       builder: (_, provider, __) {
 
-        final List<model.Image> images =  provider.getImages;
+        final List<model.Image> images = provider.getCurrentImages;
+
         final List<File> newImages =  provider.getNewImages;
 
-        final List<String> lista = List();
+        final List<String> paths = List();
+
+        final List<Widget> lista = List();
 
         for (var i = 0; i < images.length; i++) {
-          lista.add(images[i].path);
+          paths.add(images[i].path);
+          lista.add(
+            FadeInImage(
+              placeholder: AssetImage('assets/24.gif'), 
+              image: NetworkImage('http://10.0.2.2/shareplace-backend---facundo-tenuta/public/img/' + images[i].path),
+            )
+          );
         }
 
         for (var i = 0; i < newImages.length; i++) {
-          lista.add(newImages[i].path);
+          paths.add(newImages[i].path);
+          lista.add(
+            Image(image: FileImage(newImages[i]))
+          );
         }
 
         if (lista.isNotEmpty) {
@@ -446,8 +520,8 @@ class EditPublicationPage extends StatelessWidget {
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: <Widget>[
                     Container(
-                      width: 250,
-                      child: Text(lista[index]),
+                      width: 130,
+                      child: lista[index]
                     ),
                     Container(
                       margin: EdgeInsets.only(left: 15),
@@ -459,13 +533,15 @@ class EditPublicationPage extends StatelessWidget {
                           backgroundColor: Color.fromRGBO(206, 80, 80, 1),
                           child: Icon(Icons.remove, size: 24.0,),
                           onPressed: () {
-                            String aux = lista[indice];
-
-                            // images.removeWhere((image) => image.path == aux);
-                            provider.removeImage(aux);
+                            String aux = paths[indice];
+                            
                             newImages.removeWhere((image) => image.path == aux);
-
-                            provider.setImages(images);
+                            if (aux.contains('storage')) {
+                              
+                            }else{
+                              provider.removeImage(aux);
+                            }
+                            
                             provider.setNewImages(newImages);
                           },
                         ),
