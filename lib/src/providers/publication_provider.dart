@@ -271,7 +271,7 @@ class PublicationProvider with ChangeNotifier {
     formData.fields.add(MapEntry("_method", "put"),);
 
     var response = await new Dio().post(
-      'http://10.0.2.2/shareplace-backend---facundo-tenuta/public/api/publications/${_id}',
+      'http://10.0.2.2/shareplace-backend---facundo-tenuta/public/api/publications/$_id',
       options: Options(
         headers: {
           "Content-Type": "application/json",
